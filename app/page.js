@@ -5,21 +5,21 @@ import { useState, useEffect, useRef, useCallback } from "react";
 const GOOGLE_API_KEY = "AIzaSyCtqwdf34gJt0WnKtVtXurDAqh2E0UgmJY"; // ← sostituisci con la tua key
 
 const items = [
-  { emoji: "🕐", size: 64, x: 55, y: 8, delay: 0 },
-  { emoji: "⚽", size: 60, x: 68, y: 12, delay: 0.15 },
-  { emoji: "🪴", size: 52, x: 78, y: 10, delay: 0.3 },
-  { emoji: "🧸", size: 66, x: 61, y: 22, delay: 0.1 },
-  { emoji: "🖼️", size: 56, x: 70, y: 25, delay: 0.25 },
-  { emoji: "⚙️", size: 60, x: 80, y: 23, delay: 0.4 },
-  { emoji: "🚲", size: 52, x: 50, y: 28, delay: 0.2 },
-  { emoji: "📦", size: 58, x: 48, y: 38, delay: 0.35 },
-  { emoji: "📺", size: 54, x: 58, y: 40, delay: 0.05 },
-  { emoji: "🛏️", size: 60, x: 67, y: 38, delay: 0.45 },
-  { emoji: "🏺", size: 52, x: 73, y: 33, delay: 0.2 },
-  { emoji: "🪑", size: 56, x: 49, y: 49, delay: 0.3 },
-  { emoji: "🗄️", size: 58, x: 68, y: 52, delay: 0.1 },
-  { emoji: "🖥️", size: 62, x: 77, y: 50, delay: 0.5 },
-  { emoji: "🛍️", size: 50, x: 59, y: 55, delay: 0.4 },
+  { emoji: "🕐", size, x, y, delay },
+  { emoji: "⚽", size, x, y, delay.15 },
+  { emoji: "🪴", size, x, y, delay.3 },
+  { emoji: "🧸", size, x, y, delay.1 },
+  { emoji: "🖼️", size, x, y, delay.25 },
+  { emoji: "⚙️", size, x, y, delay.4 },
+  { emoji: "🚲", size, x, y, delay.2 },
+  { emoji: "📦", size, x, y, delay.35 },
+  { emoji: "📺", size, x, y, delay.05 },
+  { emoji: "🛏️", size, x, y, delay.45 },
+  { emoji: "🏺", size, x, y, delay.2 },
+  { emoji: "🪑", size, x, y, delay.3 },
+  { emoji: "🗄️", size, x, y, delay.1 },
+  { emoji: "🖥️", size, x, y, delay.5 },
+  { emoji: "🛍️", size, x, y, delay.4 },
 ];
 
 function useGoogleAutocomplete(inputRef, onSelect, sessionKey) {
@@ -55,7 +55,7 @@ function calcDistance(origin, destination) {
             travelMode: window.google.maps.TravelMode.DRIVING,
             unitSystem: window.google.maps.UnitSystem.METRIC,
           },
-          (response: any, status) => {
+          (response, status) => {
             if (status === "OK") {
               const element = response.rows[0].elements[0];
               if (element.status === "OK") {
@@ -132,14 +132,14 @@ export default function TuportuLanding() {
     setSendError(false);
 
     const payload = {
-      nome: form.nome,
-      cognome: form.cognome,
-      email: form.email,
-      telefono: form.telefono,
-      partenza: pickup,
-      destinazione: dropoff,
-      distanza: distanceInfo?.distance ?? "N/D",
-      tempo: distanceInfo?.duration ?? "N/D",
+      nome.nome,
+      cognome.cognome,
+      email.email,
+      telefono.telefono,
+      partenza,
+      destinazione,
+      distanza?.distance ?? "N/D",
+      tempo?.duration ?? "N/D",
     };
 
     try {
@@ -147,7 +147,7 @@ export default function TuportuLanding() {
         method: "POST",
         mode: "no-cors",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body.stringify(payload),
       });
       setFormSent(true);
     } catch (err) {
@@ -252,7 +252,7 @@ export default function TuportuLanding() {
                       }}
                       style={{
                         ...styles.fieldInput,
-                        borderColor: formErrors[key] ? "#e04040" : "#e0e0e0",
+                        borderColor[key] ? "#e04040" : "#e0e0e0",
                       }}
                     />
                     {formErrors[key] && <span style={styles.fieldError}>{formErrors[key]}</span>}
@@ -271,8 +271,8 @@ export default function TuportuLanding() {
                 <button
                   style={{
                     ...styles.submitBtn,
-                    opacity: sendingForm ? 0.7 : 1,
-                    cursor: sendingForm ? "wait" : "pointer",
+                    opacity ? 0.7 : 1,
+                    cursor ? "wait" : "pointer",
                   }}
                   disabled={sendingForm}
                   onClick={handleFormSubmit}
@@ -292,15 +292,15 @@ export default function TuportuLanding() {
                 key={i}
                 style={{
                   ...styles.itemBubble,
-                  width: item.size,
-                  height: item.size,
+                  width.size,
+                  height.size,
                   left: `${item.x}%`,
                   top: `${item.y}%`,
-                  opacity: mounted ? 1 : 0,
-                  transform: mounted ? "translateY(0)" : "translateY(20px)",
+                  opacity ? 1 : 0,
+                  transform ? "translateY(0)" : "translateY(20px)",
                   transition: `opacity 0.6s ease ${item.delay}s, transform 0.6s ease ${item.delay}s`,
                   animation: `float${i % 3} ${3 + (i % 2)}s ease-in-out ${item.delay}s infinite`,
-                  fontSize: item.size * 0.45,
+                  fontSize.size * 0.45,
                 }}
               >
                 {item.emoji}
@@ -311,23 +311,23 @@ export default function TuportuLanding() {
           <div style={styles.heroContent} className="tuportu-hero-content">
             <h1 style={{
               ...styles.headline,
-              opacity: mounted ? 1 : 0,
-              transform: mounted ? "translateY(0)" : "translateY(30px)",
+              opacity ? 1 : 0,
+              transform ? "translateY(0)" : "translateY(30px)",
               transition: "opacity 0.7s ease 0.2s, transform 0.7s ease 0.2s",
             }}>
               Trasporta <span style={styles.highlight}>di tutto</span>
             </h1>
             <h2 style={{
               ...styles.subHeadline,
-              opacity: mounted ? 1 : 0,
-              transform: mounted ? "translateY(0)" : "translateY(30px)",
+              opacity ? 1 : 0,
+              transform ? "translateY(0)" : "translateY(30px)",
               transition: "opacity 0.7s ease 0.35s, transform 0.7s ease 0.35s",
             }}>
               con un semplice click
             </h2>
             <p style={{
               ...styles.desc,
-              opacity: mounted ? 1 : 0,
+              opacity ? 1 : 0,
               transition: "opacity 0.7s ease 0.5s",
             }}>
               In base alle tue esigenze, quando, dove e come vuoi
@@ -335,8 +335,8 @@ export default function TuportuLanding() {
 
             <div className="tuportu-address-bar" style={{
               ...styles.addressBar,
-              opacity: mounted ? 1 : 0,
-              transform: mounted ? "translateY(0)" : "translateY(20px)",
+              opacity ? 1 : 0,
+              transform ? "translateY(0)" : "translateY(20px)",
               transition: "opacity 0.7s ease 0.6s, transform 0.7s ease 0.6s",
             }}>
               <div style={{...styles.inputGroup, position:"relative", flex:1}} className="tuportu-input-group">
@@ -366,8 +366,8 @@ export default function TuportuLanding() {
                 className="tuportu-see-prices"
                 style={{
                   ...styles.seePricesBtn,
-                  background: canSubmit ? "#5b4fcf" : "#c8c8d0",
-                  cursor: canSubmit ? "pointer" : "not-allowed",
+                  background ? "#5b4fcf" : "#c8c8d0",
+                  cursor ? "pointer" : "not-allowed",
                 }}
                 disabled={!canSubmit}
                 onClick={handleVediPrezzi}
@@ -379,7 +379,7 @@ export default function TuportuLanding() {
         </section>
       )}
 
-        {/* ── SEZIONE 1: Consegne e trasporti ── */}
+        {/* ── SEZIONE 1 e trasporti ── */}
         <section style={secStyles.section} className="tuportu-section">
           <h2 style={secStyles.sectionTitle}>Consegne e trasporti su richiesta</h2>
           <div style={secStyles.twoCards} className="tuportu-two-cards">
@@ -390,7 +390,7 @@ export default function TuportuLanding() {
                 <img
                   src="https://i.postimg.cc/7YTGHNSF/SVG.jpg"
                   alt="mappa città"
-                  style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 16, display: "block", position: "absolute", top: 0, left: 0 }}
+                  style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius, display: "block", position: "absolute", top, left }}
                 />
               </div>
             </div>
@@ -415,7 +415,7 @@ export default function TuportuLanding() {
           </div>
         </section>
 
-        {/* ── SEZIONE 2: Servizi ── */}
+        {/* ── SEZIONE 2 ── */}
         <section style={secStyles.section} className="tuportu-section">
           <h2 style={secStyles.sectionTitle}>Un camion per ogni occasione</h2>
           <div style={secStyles.servicesGrid} className="tuportu-services-grid">
@@ -445,7 +445,7 @@ export default function TuportuLanding() {
           </div>
         </section>
 
-        {/* ── SEZIONE 3: Diventa uno di noi ── */}
+        {/* ── SEZIONE 3 uno di noi ── */}
         <section style={secStyles.joinSection} className="tuportu-join">
           <div style={secStyles.joinContent} className="tuportu-join-content">
             <div>
@@ -465,15 +465,15 @@ export default function TuportuLanding() {
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;900&display=swap');
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing-box; margin; padding; }
         body { font-family: 'Outfit', sans-serif; }
         @keyframes float0 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
         @keyframes float1 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-15px)} }
         @keyframes float2 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
         @keyframes fadeInUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
-        a { text-decoration: none; }
-        input:focus { outline: none; }
-        button { cursor: pointer; font-family: 'Outfit', sans-serif; }
+        a { text-decoration; }
+        input:focus { outline; }
+        button { cursor; font-family: 'Outfit', sans-serif; }
 
         /* Google Places dropdown */
         .pac-container { font-family:'Outfit',sans-serif !important; border-radius:12px !important; border:1.5px solid #e0e0e0 !important; box-shadow:0 8px 32px rgba(0,0,0,0.10) !important; margin-top:6px !important; overflow:hidden !important; }
@@ -485,29 +485,29 @@ export default function TuportuLanding() {
         .pac-logo::after { display:none !important; }
 
         /* ── MOBILE ── */
-        @media (max-width: 640px) {
-          .tuportu-nav { padding: 14px 20px !important; }
-          .tuportu-tagline { display: none; }
-          .tuportu-hero { padding-top: 40px !important; padding-left: 20px !important; padding-right: 20px !important; align-items: flex-start !important; }
-          .tuportu-hero-content { max-width: 100% !important; }
-          .tuportu-address-bar { flex-direction: column !important; border-radius: 16px !important; max-width: 100% !important; }
-          .tuportu-input-group { width: 100% !important; padding: 12px 16px !important; }
-          .tuportu-bar-divider { width: 100% !important; height: 1px !important; }
-          .tuportu-see-prices { width: 100% !important; border-radius: 0 0 14px 14px !important; padding: 14px !important; text-align: center; }
-          .tuportu-big-card { padding: 28px 20px !important; border-radius: 20px !important; }
-          .tuportu-form-grid { grid-template-columns: 1fr !important; }
-          .tuportu-form-actions { flex-direction: column !important; gap: 12px !important; }
-          .tuportu-form-actions button { width: 100% !important; justify-content: center; }
-          .tuportu-thank-card { padding: 40px 24px !important; }
-          .tuportu-items-container { opacity: 0.3; }
-          .tuportu-map-container { position: relative; }
-          .tuportu-map-container { min-height: 220px !important; }
-          .tuportu-two-cards { grid-template-columns: 1fr !important; }
+        @media (max-width) {
+          .tuportu-nav { padding 20px !important; }
+          .tuportu-tagline { display; }
+          .tuportu-hero { padding-top !important; padding-left !important; padding-right !important; align-items-start !important; }
+          .tuportu-hero-content { max-width% !important; }
+          .tuportu-address-bar { flex-direction !important; border-radius !important; max-width% !important; }
+          .tuportu-input-group { width% !important; padding 16px !important; }
+          .tuportu-bar-divider { width% !important; height !important; }
+          .tuportu-see-prices { width% !important; border-radius 0 14px 14px !important; padding !important; text-align; }
+          .tuportu-big-card { padding 20px !important; border-radius !important; }
+          .tuportu-form-grid { grid-template-columns !important; }
+          .tuportu-form-actions { flex-direction !important; gap !important; }
+          .tuportu-form-actions button { width% !important; justify-content; }
+          .tuportu-thank-card { padding 24px !important; }
+          .tuportu-items-container { opacity.3; }
+          .tuportu-map-container { position; }
+          .tuportu-map-container { min-height !important; }
+          .tuportu-two-cards { grid-template-columns !important; }
           .tuportu-services-grid { grid-template-columns: repeat(2, 1fr) !important; }
-          .tuportu-section { padding: 48px 20px 0 !important; }
-          .tuportu-join { margin: 40px 20px !important; padding: 32px 24px !important; }
-          .tuportu-join-content { flex-wrap: wrap !important; gap: 20px !important; }
-          .tuportu-truck { display: none !important; }
+          .tuportu-section { padding 20px 0 !important; }
+          .tuportu-join { margin 20px !important; padding 24px !important; }
+          .tuportu-join-content { flex-wrap !important; gap !important; }
+          .tuportu-truck { display !important; }
         }
       `}</style>
     </div>
@@ -516,104 +516,104 @@ export default function TuportuLanding() {
 
 const footerStyles = {
   footer: { display: "flex", alignItems: "center", justifyContent: "space-between", padding: "24px 80px", borderTop: "1px solid #f0f0f0", background: "#fff" },
-  logo: { fontSize: 22, fontWeight: 900, color: "#1a1a2e", letterSpacing: "-1px" },
-  copy: { fontSize: 13, color: "#aaa", fontWeight: 400 },
+  logo: { fontSize, fontWeight, color: "#1a1a2e", letterSpacing: "-1px" },
+  copy: { fontSize, color: "#aaa", fontWeight },
 };
 
 const secStyles = {
   section: { padding: "48px 80px 0", background: "#fff" },
-  sectionTitle: { fontSize: "clamp(28px, 4vw, 42px)", fontWeight: 900, color: "#111", letterSpacing: "-1px", marginBottom: 32 },
+  sectionTitle: { fontSize: "clamp(28px, 4vw, 42px)", fontWeight, color: "#111", letterSpacing: "-1px", marginBottom },
 
   // Two cards
-  twoCards: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, alignItems: "stretch" },
-  cardPurple: { background: "linear-gradient(135deg, #5b4fcf, #7c6fe0)", borderRadius: 24, padding: 28, overflow: "hidden", display: "flex", flexDirection: "column" },
-  cardLabel: { fontSize: 18, fontWeight: 800, color: "#fff", marginBottom: 20 },
-  cardLabelDark: { fontSize: 18, fontWeight: 800, color: "#1a1a2e", marginBottom: 20 },
-  cardYellow: { background: "linear-gradient(135deg, #ffc107, #ffdd57)", borderRadius: 24, padding: 28, display: "flex", flexDirection: "column" },
-  mapPlaceholder: { background: "rgba(255,255,255,0.15)", borderRadius: 16, padding: 24, display: "flex", flexDirection: "column", alignItems: "center", gap: 12 },
-  mapContainer: { borderRadius: 16, overflow: "hidden", flex: 1, marginTop: 12, minHeight: 0, position: "relative" },
-  mapPin: { width: 48, height: 48, background: "#fff", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, color: "#5b4fcf", fontWeight: 900, boxShadow: "0 4px 16px rgba(0,0,0,0.15)" },
-  mapRoute: { width: 3, height: 40, background: "rgba(255,255,255,0.5)", borderRadius: 4 },
-  mapDot: { width: 16, height: 16, background: "#ffe033", borderRadius: "50%", border: "3px solid #fff" },
-  mapText: { fontSize: 13, color: "rgba(255,255,255,0.85)", textAlign: "center", marginTop: 8 },
+  twoCards: { display: "grid", gridTemplateColumns: "1fr 1fr", gap, alignItems: "stretch" },
+  cardPurple: { background: "linear-gradient(135deg, #5b4fcf, #7c6fe0)", borderRadius, padding, overflow: "hidden", display: "flex", flexDirection: "column" },
+  cardLabel: { fontSize, fontWeight, color: "#fff", marginBottom },
+  cardLabelDark: { fontSize, fontWeight, color: "#1a1a2e", marginBottom },
+  cardYellow: { background: "linear-gradient(135deg, #ffc107, #ffdd57)", borderRadius, padding, display: "flex", flexDirection: "column" },
+  mapPlaceholder: { background: "rgba(255,255,255,0.15)", borderRadius, padding, display: "flex", flexDirection: "column", alignItems: "center", gap },
+  mapContainer: { borderRadius, overflow: "hidden", flex, marginTop, minHeight, position: "relative" },
+  mapPin: { width, height, background: "#fff", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize, color: "#5b4fcf", fontWeight, boxShadow: "0 4px 16px rgba(0,0,0,0.15)" },
+  mapRoute: { width, height, background: "rgba(255,255,255,0.5)", borderRadius },
+  mapDot: { width, height, background: "#ffe033", borderRadius: "50%", border: "3px solid #fff" },
+  mapText: { fontSize, color: "rgba(255,255,255,0.85)", textAlign: "center", marginTop },
 
   // Schedule
-  scheduleBox: { background: "#fff", borderRadius: 16, padding: "20px 20px", flex: 1, marginTop: 12 },
-  scheduleSubLabel: { fontSize: 12, color: "#888", fontWeight: 500, marginBottom: 12, textTransform: "uppercase", letterSpacing: "0.4px" },
-  daysRow: { display: "flex", gap: 8 },
-  dayActive: { width: 44, height: 44, background: "#5b4fcf", color: "#fff", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 16 },
-  dayInactive: { width: 44, height: 44, background: "#f4f4f6", color: "#999", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 600, fontSize: 16 },
-  slotsGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 },
-  slotActive: { background: "#5b4fcf", color: "#fff", borderRadius: 10, padding: "10px 14px", fontSize: 13, fontWeight: 700, textAlign: "center" },
-  slotInactive: { background: "#f4f4f6", color: "#555", borderRadius: 10, padding: "10px 14px", fontSize: 13, fontWeight: 500, textAlign: "center" },
+  scheduleBox: { background: "#fff", borderRadius, padding: "20px 20px", flex, marginTop },
+  scheduleSubLabel: { fontSize, color: "#888", fontWeight, marginBottom, textTransform: "uppercase", letterSpacing: "0.4px" },
+  daysRow: { display: "flex", gap },
+  dayActive: { width, height, background: "#5b4fcf", color: "#fff", borderRadius, display: "flex", alignItems: "center", justifyContent: "center", fontWeight, fontSize },
+  dayInactive: { width, height, background: "#f4f4f6", color: "#999", borderRadius, display: "flex", alignItems: "center", justifyContent: "center", fontWeight, fontSize },
+  slotsGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap },
+  slotActive: { background: "#5b4fcf", color: "#fff", borderRadius, padding: "10px 14px", fontSize, fontWeight, textAlign: "center" },
+  slotInactive: { background: "#f4f4f6", color: "#555", borderRadius, padding: "10px 14px", fontSize, fontWeight, textAlign: "center" },
 
   // Services grid
-  servicesGrid: { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 },
-  serviceItem: { display: "flex", alignItems: "center", gap: 12, padding: "16px 18px", border: "1.5px solid #f0f0f0", borderRadius: 14, background: "#fff", transition: "box-shadow 0.2s" },
-  serviceIcon: { fontSize: 22, flexShrink: 0 },
-  serviceLabel: { fontSize: 13, fontWeight: 500, color: "#333", lineHeight: 1.3 },
+  servicesGrid: { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap },
+  serviceItem: { display: "flex", alignItems: "center", gap, padding: "16px 18px", border: "1.5px solid #f0f0f0", borderRadius, background: "#fff", transition: "box-shadow 0.2s" },
+  serviceIcon: { fontSize, flexShrink },
+  serviceLabel: { fontSize, fontWeight, color: "#333", lineHeight.3 },
 
   // Join section
-  joinSection: { margin: "80px 80px 80px", background: "#f7f5ff", borderRadius: 24, padding: "48px 56px" },
-  joinContent: { display: "flex", alignItems: "center", gap: 40 },
-  joinTitle: { fontSize: "clamp(24px, 3vw, 36px)", fontWeight: 900, color: "#111", letterSpacing: "-0.5px", marginBottom: 8 },
-  joinDesc: { fontSize: 15, color: "#666" },
-  joinBtn: { background: "#ffe033", color: "#1a1a2e", border: "none", borderRadius: 12, padding: "14px 32px", fontSize: 15, fontWeight: 700, flexShrink: 0, whiteSpace: "nowrap" },
-  truckEmoji: { fontSize: 80, marginLeft: "auto", flexShrink: 0 },
+  joinSection: { margin: "80px 80px 80px", background: "#f7f5ff", borderRadius, padding: "48px 56px" },
+  joinContent: { display: "flex", alignItems: "center", gap },
+  joinTitle: { fontSize: "clamp(24px, 3vw, 36px)", fontWeight, color: "#111", letterSpacing: "-0.5px", marginBottom },
+  joinDesc: { fontSize, color: "#666" },
+  joinBtn: { background: "#ffe033", color: "#1a1a2e", border: "none", borderRadius, padding: "14px 32px", fontSize, fontWeight, flexShrink, whiteSpace: "nowrap" },
+  truckEmoji: { fontSize, marginLeft: "auto", flexShrink },
 };
 
 const styles = {
   page: { fontFamily: "'Outfit', sans-serif", minHeight: "100vh", background: "#ffffff", overflow: "hidden" },
-  nav: { display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 48px", borderBottom: "1px solid #f0f0f0", position: "relative", zIndex: 10, background: "#fff" },
-  navLeft: { display: "flex", alignItems: "center", gap: 10 },
-  logo: { fontSize: 26, fontWeight: 900, color: "#1a1a2e", letterSpacing: "-1px" },
-  tagline: { fontSize: 13, color: "#888", fontWeight: 400 },
-  navRight: { display: "flex", alignItems: "center", gap: 20 },
-  bookBtn: { background: "#5b4fcf", color: "#fff", border: "none", borderRadius: 10, padding: "10px 22px", fontSize: 14, fontWeight: 600 },
+  nav: { display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 48px", borderBottom: "1px solid #f0f0f0", position: "relative", zIndex, background: "#fff" },
+  navLeft: { display: "flex", alignItems: "center", gap },
+  logo: { fontSize, fontWeight, color: "#1a1a2e", letterSpacing: "-1px" },
+  tagline: { fontSize, color: "#888", fontWeight },
+  navRight: { display: "flex", alignItems: "center", gap },
+  bookBtn: { background: "#5b4fcf", color: "#fff", border: "none", borderRadius, padding: "10px 22px", fontSize, fontWeight },
   thankYouPage: { minHeight: "calc(100vh - 65px)", display: "flex", alignItems: "center", justifyContent: "center", background: "#fafafa", padding: "32px 16px" },
-  thankYouCard: { background: "#fff", borderRadius: 24, padding: "56px 48px", maxWidth: 440, width: "100%", textAlign: "center", boxShadow: "0 8px 48px rgba(0,0,0,0.08)", animation: "fadeInUp 0.5s ease forwards" },
-  checkIcon: { width: 72, height: 72, background: "#5b4fcf", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 34, color: "#fff", margin: "0 auto 24px", fontWeight: 700 },
-  thankYouTitle: { fontSize: 26, fontWeight: 900, color: "#111", letterSpacing: "-0.5px", marginBottom: 12 },
-  thankYouDesc: { fontSize: 15, color: "#777", lineHeight: 1.6, marginBottom: 28 },
-  backBtn: { background: "transparent", border: "2px solid #5b4fcf", color: "#5b4fcf", borderRadius: 12, padding: "12px 28px", fontSize: 15, fontWeight: 600 },
-  bigCard: { background: "#fff", borderRadius: 24, padding: "40px 44px", maxWidth: 580, width: "100%", boxShadow: "0 8px 48px rgba(0,0,0,0.08)", animation: "fadeInUp 0.5s ease forwards" },
-  routeHeader: { background: "#f7f5ff", borderRadius: 14, padding: "18px 20px", marginBottom: 20 },
-  routeRow: { display: "flex", alignItems: "flex-start", gap: 10 },
-  routeIconUp: { fontSize: 16, color: "#5b4fcf", fontWeight: 700, flexShrink: 0, marginTop: 2 },
-  routeIconDown: { fontSize: 16, color: "#5b4fcf", fontWeight: 700, flexShrink: 0, marginTop: 2 },
-  routeText: { fontSize: 13, color: "#333", fontWeight: 500, lineHeight: 1.4 },
-  routeDotted: { borderLeft: "2px dashed #c5bef5", height: 16, marginLeft: 7, marginTop: 4, marginBottom: 4 },
-  distanceBox: { display: "flex", alignItems: "center", justifyContent: "center", background: "#1a1a2e", borderRadius: 14, padding: "20px 28px", marginBottom: 24 },
-  distanceStat: { display: "flex", flexDirection: "column", alignItems: "center", flex: 1 },
-  distanceValue: { fontSize: 26, fontWeight: 900, color: "#fff", letterSpacing: "-0.5px" },
-  distanceLabel: { fontSize: 12, color: "#8888aa", fontWeight: 500, marginTop: 4, textTransform: "uppercase", letterSpacing: "0.5px" },
-  distanceDivider: { width: 1, height: 40, background: "#333355", margin: "0 20px" },
-  distanceLoading: { fontSize: 14, color: "#8888aa" },
-  formDivider: { height: 1, background: "#f0f0f0", marginBottom: 24 },
-  formTitle: { fontSize: 16, fontWeight: 700, color: "#111", marginBottom: 20 },
-  formGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px 20px", marginBottom: 28 },
-  fieldGroup: { display: "flex", flexDirection: "column", gap: 6 },
-  fieldLabel: { fontSize: 12, fontWeight: 600, color: "#555", textTransform: "uppercase", letterSpacing: "0.4px" },
-  fieldInput: { border: "1.5px solid #e0e0e0", borderRadius: 10, padding: "11px 14px", fontSize: 14, color: "#333", fontFamily: "'Outfit', sans-serif", transition: "border-color 0.2s" },
-  fieldError: { fontSize: 11, color: "#e04040", fontWeight: 500 },
-  sendErrorMsg: { fontSize: 13, color: "#e04040", marginBottom: 16, textAlign: "center" },
+  thankYouCard: { background: "#fff", borderRadius, padding: "56px 48px", maxWidth, width: "100%", textAlign: "center", boxShadow: "0 8px 48px rgba(0,0,0,0.08)", animation: "fadeInUp 0.5s ease forwards" },
+  checkIcon: { width, height, background: "#5b4fcf", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize, color: "#fff", margin: "0 auto 24px", fontWeight },
+  thankYouTitle: { fontSize, fontWeight, color: "#111", letterSpacing: "-0.5px", marginBottom },
+  thankYouDesc: { fontSize, color: "#777", lineHeight.6, marginBottom },
+  backBtn: { background: "transparent", border: "2px solid #5b4fcf", color: "#5b4fcf", borderRadius, padding: "12px 28px", fontSize, fontWeight },
+  bigCard: { background: "#fff", borderRadius, padding: "40px 44px", maxWidth, width: "100%", boxShadow: "0 8px 48px rgba(0,0,0,0.08)", animation: "fadeInUp 0.5s ease forwards" },
+  routeHeader: { background: "#f7f5ff", borderRadius, padding: "18px 20px", marginBottom },
+  routeRow: { display: "flex", alignItems: "flex-start", gap },
+  routeIconUp: { fontSize, color: "#5b4fcf", fontWeight, flexShrink, marginTop },
+  routeIconDown: { fontSize, color: "#5b4fcf", fontWeight, flexShrink, marginTop },
+  routeText: { fontSize, color: "#333", fontWeight, lineHeight.4 },
+  routeDotted: { borderLeft: "2px dashed #c5bef5", height, marginLeft, marginTop, marginBottom },
+  distanceBox: { display: "flex", alignItems: "center", justifyContent: "center", background: "#1a1a2e", borderRadius, padding: "20px 28px", marginBottom },
+  distanceStat: { display: "flex", flexDirection: "column", alignItems: "center", flex },
+  distanceValue: { fontSize, fontWeight, color: "#fff", letterSpacing: "-0.5px" },
+  distanceLabel: { fontSize, color: "#8888aa", fontWeight, marginTop, textTransform: "uppercase", letterSpacing: "0.5px" },
+  distanceDivider: { width, height, background: "#333355", margin: "0 20px" },
+  distanceLoading: { fontSize, color: "#8888aa" },
+  formDivider: { height, background: "#f0f0f0", marginBottom },
+  formTitle: { fontSize, fontWeight, color: "#111", marginBottom },
+  formGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px 20px", marginBottom },
+  fieldGroup: { display: "flex", flexDirection: "column", gap },
+  fieldLabel: { fontSize, fontWeight, color: "#555", textTransform: "uppercase", letterSpacing: "0.4px" },
+  fieldInput: { border: "1.5px solid #e0e0e0", borderRadius, padding: "11px 14px", fontSize, color: "#333", fontFamily: "'Outfit', sans-serif", transition: "border-color 0.2s" },
+  fieldError: { fontSize, color: "#e04040", fontWeight },
+  sendErrorMsg: { fontSize, color: "#e04040", marginBottom, textAlign: "center" },
   formActions: { display: "flex", justifyContent: "space-between", alignItems: "center" },
-  backBtnSmall: { background: "transparent", border: "2px solid #e0e0e0", color: "#777", borderRadius: 10, padding: "11px 20px", fontSize: 14, fontWeight: 600 },
-  submitBtn: { background: "#5b4fcf", color: "#fff", border: "none", borderRadius: 10, padding: "12px 28px", fontSize: 15, fontWeight: 700, transition: "opacity 0.2s" },
-  hero: { position: "relative", minHeight: "auto", paddingBottom: 80, display: "flex", alignItems: "flex-start", paddingTop: 80, paddingLeft: 80, overflow: "hidden" },
-  itemsContainer: { position: "absolute", inset: 0, pointerEvents: "none" },
+  backBtnSmall: { background: "transparent", border: "2px solid #e0e0e0", color: "#777", borderRadius, padding: "11px 20px", fontSize, fontWeight },
+  submitBtn: { background: "#5b4fcf", color: "#fff", border: "none", borderRadius, padding: "12px 28px", fontSize, fontWeight, transition: "opacity 0.2s" },
+  hero: { position: "relative", minHeight: "auto", paddingBottom, display: "flex", alignItems: "flex-start", paddingTop, paddingLeft, overflow: "hidden" },
+  itemsContainer: { position: "absolute", inset, pointerEvents: "none" },
   itemBubble: { position: "absolute", background: "#f4f4f6", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" },
-  heroContent: { position: "relative", zIndex: 2, maxWidth: 680 },
-  headline: { fontSize: "clamp(48px, 6vw, 88px)", fontWeight: 900, color: "#111", lineHeight: 1.05, letterSpacing: "-2px" },
-  highlight: { background: "#ffe033", borderRadius: 12, padding: "0 12px", display: "inline-block" },
-  subHeadline: { fontSize: "clamp(40px, 5.5vw, 82px)", fontWeight: 900, color: "#c8c8c8", lineHeight: 1.05, letterSpacing: "-2px", marginTop: 4 },
-  desc: { fontSize: 16, color: "#555", marginTop: 24, lineHeight: 1.6, maxWidth: 520 },
-  addressBar: { marginTop: 32, display: "flex", alignItems: "center", border: "2px solid #e0e0e0", borderRadius: 16, background: "#fff", overflow: "hidden", maxWidth: 620, boxShadow: "0 4px 24px rgba(0,0,0,0.07)" },
-  inputGroup: { display: "flex", alignItems: "center", flex: 1, padding: "14px 16px", gap: 10 },
-  inputIcon: { fontSize: 16, color: "#888", flexShrink: 0 },
-  input: { border: "none", fontSize: 14, color: "#333", fontFamily: "'Outfit', sans-serif", background: "transparent", width: "100%", fontWeight: 400 },
-  divider: { width: 1, height: 36, background: "#e0e0e0", flexShrink: 0 },
-  seePricesBtn: { color: "#fff", border: "none", padding: "14px 28px", fontSize: 15, fontWeight: 600, fontFamily: "'Outfit', sans-serif", borderRadius: "0 12px 12px 0", flexShrink: 0, transition: "background 0.3s" },
-  dropdown: { position: "absolute", top: "100%", left: 0, right: 0, background: "#fff", borderRadius: 12, boxShadow: "0 8px 32px rgba(0,0,0,0.12)", border: "1.5px solid #e0e0e0", zIndex: 100, marginTop: 4, overflow: "hidden" },
-  dropdownItem: { padding: "11px 16px", fontSize: 13, color: "#333", cursor: "pointer", borderBottom: "1px solid #f5f5f5", fontWeight: 400, transition: "background 0.15s" },
+  heroContent: { position: "relative", zIndex, maxWidth },
+  headline: { fontSize: "clamp(48px, 6vw, 88px)", fontWeight, color: "#111", lineHeight.05, letterSpacing: "-2px" },
+  highlight: { background: "#ffe033", borderRadius, padding: "0 12px", display: "inline-block" },
+  subHeadline: { fontSize: "clamp(40px, 5.5vw, 82px)", fontWeight, color: "#c8c8c8", lineHeight.05, letterSpacing: "-2px", marginTop },
+  desc: { fontSize, color: "#555", marginTop, lineHeight.6, maxWidth },
+  addressBar: { marginTop, display: "flex", alignItems: "center", border: "2px solid #e0e0e0", borderRadius, background: "#fff", overflow: "hidden", maxWidth, boxShadow: "0 4px 24px rgba(0,0,0,0.07)" },
+  inputGroup: { display: "flex", alignItems: "center", flex, padding: "14px 16px", gap },
+  inputIcon: { fontSize, color: "#888", flexShrink },
+  input: { border: "none", fontSize, color: "#333", fontFamily: "'Outfit', sans-serif", background: "transparent", width: "100%", fontWeight },
+  divider: { width, height, background: "#e0e0e0", flexShrink },
+  seePricesBtn: { color: "#fff", border: "none", padding: "14px 28px", fontSize, fontWeight, fontFamily: "'Outfit', sans-serif", borderRadius: "0 12px 12px 0", flexShrink, transition: "background 0.3s" },
+  dropdown: { position: "absolute", top: "100%", left, right, background: "#fff", borderRadius, boxShadow: "0 8px 32px rgba(0,0,0,0.12)", border: "1.5px solid #e0e0e0", zIndex, marginTop, overflow: "hidden" },
+  dropdownItem: { padding: "11px 16px", fontSize, color: "#333", cursor: "pointer", borderBottom: "1px solid #f5f5f5", fontWeight, transition: "background 0.15s" },
 };
