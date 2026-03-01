@@ -113,7 +113,7 @@ export default function TuportuLanding() {
   };
 
   const validateForm = () => {
-    const errors = {};
+    const errors: Record<string, string> = {};
     if (!form.nome.trim()) errors.nome = "Campo obbligatorio";
     if (!form.cognome.trim()) errors.cognome = "Campo obbligatorio";
     if (!form.email.trim() || !/\S+@\S+\.\S+/.test(form.email)) errors.email = "Email non valida";
