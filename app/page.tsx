@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 
 const GOOGLE_API_KEY = "AIzaSyCtqwdf34gJt0WnKtVtXurDAqh2E0UgmJY"; // ← sostituisci con la tua key
 
@@ -170,78 +170,78 @@ export default function TuportuLanding() {
   };
 
   return (
-    <div style={styles.page}>
+    <div style={styles.page as React.CSSProperties}>
       {/* Navbar */}
-      <nav style={styles.nav} className="tuportu-nav">
-        <div style={styles.navLeft}>
-          <span style={styles.logo}>Tuportu</span>
-          <span style={styles.tagline} className="tuportu-tagline">Traslochi on-demand</span>
+      <nav style={styles.nav as React.CSSProperties} className="tuportu-nav">
+        <div style={styles.navLeft as React.CSSProperties}>
+          <span style={styles.logo as React.CSSProperties}>Tuportu</span>
+          <span style={styles.tagline as React.CSSProperties} className="tuportu-tagline">Traslochi on-demand</span>
         </div>
-        <div style={styles.navRight}>
-          <button style={styles.bookBtn}>Chiamaci</button>
+        <div style={styles.navRight as React.CSSProperties}>
+          <button style={styles.bookBtn as React.CSSProperties}>Chiamaci</button>
         </div>
       </nav>
 
       {submitted ? (
-        <div style={styles.thankYouPage}>
+        <div style={styles.thankYouPage as React.CSSProperties}>
           {formSent ? (
             /* ── Conferma finale ── */
-            <div style={styles.thankYouCard} className="tuportu-thank-card">
-              <div style={styles.checkIcon}>✓</div>
-              <h2 style={styles.thankYouTitle}>Grazie per la tua richiesta!</h2>
-              <p style={styles.thankYouDesc}>Ti contatteremo a breve per fornirti il preventivo.</p>
-              <button style={styles.backBtn} onClick={handleReset}>← Nuova richiesta</button>
+            <div style={styles.thankYouCard as React.CSSProperties} className="tuportu-thank-card">
+              <div style={styles.checkIcon as React.CSSProperties}>✓</div>
+              <h2 style={styles.thankYouTitle as React.CSSProperties}>Grazie per la tua richiesta!</h2>
+              <p style={styles.thankYouDesc as React.CSSProperties}>Ti contatteremo a breve per fornirti il preventivo.</p>
+              <button style={styles.backBtn as React.CSSProperties} onClick={handleReset}>← Nuova richiesta</button>
             </div>
           ) : (
             /* ── Card distanza + form ── */
-            <div style={styles.bigCard} className="tuportu-big-card">
+            <div style={styles.bigCard as React.CSSProperties} className="tuportu-big-card">
               {/* Riepilogo percorso */}
-              <div style={styles.routeHeader}>
-                <div style={styles.routeRow}>
-                  <span style={styles.routeIconUp}>↑</span>
-                  <span style={styles.routeText}>{pickup}</span>
+              <div style={styles.routeHeader as React.CSSProperties}>
+                <div style={styles.routeRow as React.CSSProperties}>
+                  <span style={styles.routeIconUp as React.CSSProperties}>↑</span>
+                  <span style={styles.routeText as React.CSSProperties}>{pickup}</span>
                 </div>
-                <div style={styles.routeDotted} />
-                <div style={styles.routeRow}>
-                  <span style={styles.routeIconDown}>↓</span>
-                  <span style={styles.routeText}>{dropoff}</span>
+                <div style={styles.routeDotted as React.CSSProperties} />
+                <div style={styles.routeRow as React.CSSProperties}>
+                  <span style={styles.routeIconDown as React.CSSProperties}>↓</span>
+                  <span style={styles.routeText as React.CSSProperties}>{dropoff}</span>
                 </div>
               </div>
 
               {/* Distanza */}
-              <div style={styles.distanceBox}>
+              <div style={styles.distanceBox as React.CSSProperties}>
                 {loadingDistance ? (
-                  <span style={styles.distanceLoading}>Calcolo distanza…</span>
+                  <span style={styles.distanceLoading as React.CSSProperties}>Calcolo distanza…</span>
                 ) : distanceInfo ? (
                   <>
-                    <div style={styles.distanceStat}>
-                      <span style={styles.distanceValue}>{distanceInfo.distance}</span>
-                      <span style={styles.distanceLabel}>distanza</span>
+                    <div style={styles.distanceStat as React.CSSProperties}>
+                      <span style={styles.distanceValue as React.CSSProperties}>{distanceInfo.distance}</span>
+                      <span style={styles.distanceLabel as React.CSSProperties}>distanza</span>
                     </div>
-                    <div style={styles.distanceDivider} />
-                    <div style={styles.distanceStat}>
-                      <span style={styles.distanceValue}>{distanceInfo.duration}</span>
-                      <span style={styles.distanceLabel}>tempo stimato</span>
+                    <div style={styles.distanceDivider as React.CSSProperties} />
+                    <div style={styles.distanceStat as React.CSSProperties}>
+                      <span style={styles.distanceValue as React.CSSProperties}>{distanceInfo.duration}</span>
+                      <span style={styles.distanceLabel as React.CSSProperties}>tempo stimato</span>
                     </div>
                   </>
                 ) : (
-                  <span style={styles.distanceLoading}>Impossibile calcolare la distanza</span>
+                  <span style={styles.distanceLoading as React.CSSProperties}>Impossibile calcolare la distanza</span>
                 )}
               </div>
 
-              <div style={styles.formDivider} />
+              <div style={styles.formDivider as React.CSSProperties} />
 
               {/* Form */}
-              <p style={styles.formTitle}>Lasciaci i tuoi contatti</p>
-              <div style={styles.formGrid} className="tuportu-form-grid">
+              <p style={styles.formTitle as React.CSSProperties}>Lasciaci i tuoi contatti</p>
+              <div style={styles.formGrid as React.CSSProperties} className="tuportu-form-grid">
                 {[
                   { key: "nome", label: "Nome", type: "text", placeholder: "Mario" },
                   { key: "cognome", label: "Cognome", type: "text", placeholder: "Rossi" },
                   { key: "email", label: "Email", type: "email", placeholder: "mario@email.com" },
                   { key: "telefono", label: "Telefono", type: "tel", placeholder: "+39 333 000 0000" },
                 ].map(({ key, label, type, placeholder }) => (
-                  <div key={key} style={styles.fieldGroup}>
-                    <label style={styles.fieldLabel}>{label}</label>
+                  <div key={key} style={styles.fieldGroup as React.CSSProperties}>
+                    <label style={styles.fieldLabel as React.CSSProperties}>{label}</label>
                     <input
                       type={type}
                       placeholder={placeholder}
@@ -255,19 +255,19 @@ export default function TuportuLanding() {
                         borderColor: formErrors[key] ? "#e04040" : "#e0e0e0",
                       }}
                     />
-                    {formErrors[key] && <span style={styles.fieldError}>{formErrors[key]}</span>}
+                    {formErrors[key] && <span style={styles.fieldError as React.CSSProperties}>{formErrors[key]}</span>}
                   </div>
                 ))}
               </div>
 
               {sendError && (
-                <p style={styles.sendErrorMsg}>
+                <p style={styles.sendErrorMsg as React.CSSProperties}>
                   ⚠️ Errore durante l'invio. Riprova o contattaci direttamente.
                 </p>
               )}
 
-              <div style={styles.formActions} className="tuportu-form-actions">
-                <button style={styles.backBtnSmall} onClick={handleReset}>← Indietro</button>
+              <div style={styles.formActions as React.CSSProperties} className="tuportu-form-actions">
+                <button style={styles.backBtnSmall as React.CSSProperties} onClick={handleReset}>← Indietro</button>
                 <button
                   style={{
                     ...styles.submitBtn,
@@ -285,8 +285,8 @@ export default function TuportuLanding() {
         </div>
       ) : (
         /* Hero */
-        <section style={styles.hero} className="tuportu-hero">
-          <div style={styles.itemsContainer} className="tuportu-items-container">
+        <section style={styles.hero as React.CSSProperties} className="tuportu-hero">
+          <div style={styles.itemsContainer as React.CSSProperties} className="tuportu-items-container">
             {items.map((item, i) => (
               <div
                 key={i}
@@ -308,14 +308,14 @@ export default function TuportuLanding() {
             ))}
           </div>
 
-          <div style={styles.heroContent} className="tuportu-hero-content">
+          <div style={styles.heroContent as React.CSSProperties} className="tuportu-hero-content">
             <h1 style={{
               ...styles.headline,
               opacity: mounted ? 1 : 0,
               transform: mounted ? "translateY(0)" : "translateY(30px)",
               transition: "opacity 0.7s ease 0.2s, transform 0.7s ease 0.2s",
             }}>
-              Trasporta <span style={styles.highlight}>di tutto</span>
+              Trasporta <span style={styles.highlight as React.CSSProperties}>di tutto</span>
             </h1>
             <h2 style={{
               ...styles.subHeadline,
@@ -340,23 +340,23 @@ export default function TuportuLanding() {
               transition: "opacity 0.7s ease 0.6s, transform 0.7s ease 0.6s",
             }}>
               <div style={{...styles.inputGroup, position:"relative", flex:1}} className="tuportu-input-group">
-                <span style={styles.inputIcon}>↑</span>
+                <span style={styles.inputIcon as React.CSSProperties}>↑</span>
                 <input
                   key={`pickup-${sessionKey}`}
                   ref={pickupRef}
-                  style={styles.input}
+                  style={styles.input as React.CSSProperties}
                   placeholder="Indirizzo di partenza"
                   value={pickup}
                   onChange={e => setPickup(e.target.value)}
                 />
                 </div>
-              <div style={styles.divider} className="tuportu-bar-divider" />
+              <div style={styles.divider as React.CSSProperties} className="tuportu-bar-divider" />
               <div style={{...styles.inputGroup, position:"relative", flex:1}} className="tuportu-input-group">
-                <span style={styles.inputIcon}>↓</span>
+                <span style={styles.inputIcon as React.CSSProperties}>↓</span>
                 <input
                   key={`dropoff-${sessionKey}`}
                   ref={dropoffRef}
-                  style={styles.input}
+                  style={styles.input as React.CSSProperties}
                   placeholder="Indirizzo di destinazione"
                   value={dropoff}
                   onChange={e => setDropoff(e.target.value)}
@@ -380,13 +380,13 @@ export default function TuportuLanding() {
       )}
 
         {/* ── SEZIONE 1: Consegne e trasporti ── */}
-        <section style={secStyles.section} className="tuportu-section">
-          <h2 style={secStyles.sectionTitle}>Consegne e trasporti su richiesta</h2>
-          <div style={secStyles.twoCards} className="tuportu-two-cards">
+        <section style={secStyles.section as React.CSSProperties} className="tuportu-section">
+          <h2 style={secStyles.sectionTitle as React.CSSProperties}>Consegne e trasporti su richiesta</h2>
+          <div style={secStyles.twoCards as React.CSSProperties} className="tuportu-two-cards">
             {/* Card tracciamento */}
-            <div style={secStyles.cardPurple}>
-              <p style={secStyles.cardLabel}>Tracciamenti in tempo reale</p>
-              <div style={secStyles.mapContainer} className="tuportu-map-container">
+            <div style={secStyles.cardPurple as React.CSSProperties}>
+              <p style={secStyles.cardLabel as React.CSSProperties}>Tracciamenti in tempo reale</p>
+              <div style={secStyles.mapContainer as React.CSSProperties} className="tuportu-map-container">
                 <img
                   src="https://i.postimg.cc/7YTGHNSF/SVG.jpg"
                   alt="mappa città"
@@ -395,17 +395,17 @@ export default function TuportuLanding() {
               </div>
             </div>
             {/* Card scheduling */}
-            <div style={secStyles.cardYellow}>
-              <p style={secStyles.cardLabelDark}>Quando vuoi in base alle esigenze</p>
-              <div style={secStyles.scheduleBox}>
-                <p style={secStyles.scheduleSubLabel}>Seleziona il giorno</p>
-                <div style={secStyles.daysRow}>
+            <div style={secStyles.cardYellow as React.CSSProperties}>
+              <p style={secStyles.cardLabelDark as React.CSSProperties}>Quando vuoi in base alle esigenze</p>
+              <div style={secStyles.scheduleBox as React.CSSProperties}>
+                <p style={secStyles.scheduleSubLabel as React.CSSProperties}>Seleziona il giorno</p>
+                <div style={secStyles.daysRow as React.CSSProperties}>
                   {["12","13","14","15"].map((d,i) => (
                     <div key={d} style={i===0 ? secStyles.dayActive : secStyles.dayInactive}>{d}</div>
                   ))}
                 </div>
                 <p style={{...secStyles.scheduleSubLabel, marginTop:16}}>Seleziona l&apos;orario</p>
-                <div style={secStyles.slotsGrid}>
+                <div style={secStyles.slotsGrid as React.CSSProperties}>
                   {["Quanto prima","14.00 - 15.00","15.00 - 16.00","16.00 - 17.00"].map((s,i) => (
                     <div key={s} style={i===0 ? secStyles.slotActive : secStyles.slotInactive}>{s}</div>
                   ))}
@@ -416,9 +416,9 @@ export default function TuportuLanding() {
         </section>
 
         {/* ── SEZIONE 2: Servizi ── */}
-        <section style={secStyles.section} className="tuportu-section">
-          <h2 style={secStyles.sectionTitle}>Un camion per ogni occasione</h2>
-          <div style={secStyles.servicesGrid} className="tuportu-services-grid">
+        <section style={secStyles.section as React.CSSProperties} className="tuportu-section">
+          <h2 style={secStyles.sectionTitle as React.CSSProperties}>Un camion per ogni occasione</h2>
+          <div style={secStyles.servicesGrid as React.CSSProperties} className="tuportu-services-grid">
             {[
               {icon:"🏠", label:"Traslochi residenziali"},
               {icon:"🎓", label:"Traslochi studenti"},
@@ -437,30 +437,30 @@ export default function TuportuLanding() {
               {icon:"🪴", label:"Consegna piante"},
               {icon:"🏪", label:"Consegna in negozio"},
             ].map(({icon, label}) => (
-              <div key={label} style={secStyles.serviceItem}>
-                <span style={secStyles.serviceIcon}>{icon}</span>
-                <span style={secStyles.serviceLabel}>{label}</span>
+              <div key={label} style={secStyles.serviceItem as React.CSSProperties}>
+                <span style={secStyles.serviceIcon as React.CSSProperties}>{icon}</span>
+                <span style={secStyles.serviceLabel as React.CSSProperties}>{label}</span>
               </div>
             ))}
           </div>
         </section>
 
         {/* ── SEZIONE 3: Diventa uno di noi ── */}
-        <section style={secStyles.joinSection} className="tuportu-join">
-          <div style={secStyles.joinContent} className="tuportu-join-content">
+        <section style={secStyles.joinSection as React.CSSProperties} className="tuportu-join">
+          <div style={secStyles.joinContent as React.CSSProperties} className="tuportu-join-content">
             <div>
-              <h2 style={secStyles.joinTitle}>Diventa uno di noi</h2>
-              <p style={secStyles.joinDesc}>Guadagna soldi con il tuo furgone su richiesta</p>
+              <h2 style={secStyles.joinTitle as React.CSSProperties}>Diventa uno di noi</h2>
+              <p style={secStyles.joinDesc as React.CSSProperties}>Guadagna soldi con il tuo furgone su richiesta</p>
             </div>
-            <button style={secStyles.joinBtn}>Contattaci</button>
-            <div style={secStyles.truckEmoji} className="tuportu-truck">🚚</div>
+            <button style={secStyles.joinBtn as React.CSSProperties}>Contattaci</button>
+            <div style={secStyles.truckEmoji as React.CSSProperties} className="tuportu-truck">🚚</div>
           </div>
         </section>
 
         {/* ── FOOTER ── */}
-        <footer style={footerStyles.footer}>
-          <span style={footerStyles.logo}>Tuportu</span>
-          <span style={footerStyles.copy}>© {new Date().getFullYear()} Tuportu. Tutti i diritti riservati.</span>
+        <footer style={footerStyles.footer as React.CSSProperties}>
+          <span style={footerStyles.logo as React.CSSProperties}>Tuportu</span>
+          <span style={footerStyles.copy as React.CSSProperties}>© {new Date().getFullYear()} Tuportu. Tutti i diritti riservati.</span>
         </footer>
 
       <style>{`
