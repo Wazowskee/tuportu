@@ -2,24 +2,25 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 
-const GOOGLE_API_KEY = "AIzaSyCtqwdf34gJt0WnKtVtXurDAqh2E0UgmJY"; // ← sostituisci con la tua key
+const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
 
 const items = [
-  { emoji: "🕐", size, x, y, delay },
-  { emoji: "⚽", size, x, y, delay.15 },
-  { emoji: "🪴", size, x, y, delay.3 },
-  { emoji: "🧸", size, x, y, delay.1 },
-  { emoji: "🖼️", size, x, y, delay.25 },
-  { emoji: "⚙️", size, x, y, delay.4 },
-  { emoji: "🚲", size, x, y, delay.2 },
-  { emoji: "📦", size, x, y, delay.35 },
-  { emoji: "📺", size, x, y, delay.05 },
-  { emoji: "🛏️", size, x, y, delay.45 },
-  { emoji: "🏺", size, x, y, delay.2 },
-  { emoji: "🪑", size, x, y, delay.3 },
-  { emoji: "🗄️", size, x, y, delay.1 },
-  { emoji: "🖥️", size, x, y, delay.5 },
-  { emoji: "🛍️", size, x, y, delay.4 },
+  { emoji: "🕐", size: 64, x: 55, y: 8, delay: 0 },
+  { emoji: "⚽", size: 60, x: 68, y: 12, delay: 0.15 },
+  { emoji: "🪴", size: 52, x: 78, y: 10, delay: 0.3 },
+  { emoji: "🧸", size: 66, x: 61, y: 22, delay: 0.1 },
+  { emoji: "🖼️", size: 56, x: 70, y: 25, delay: 0.25 },
+  { emoji: "⚙️", size: 60, x: 80, y: 23, delay: 0.4 },
+  { emoji: "🚲", size: 52, x: 50, y: 28, delay: 0.2 },
+  { emoji: "📦", size: 58, x: 48, y: 38, delay: 0.35 },
+  { emoji: "📺", size: 54, x: 58, y: 40, delay: 0.05 },
+  { emoji: "🛏️", size: 60, x: 67, y: 38, delay: 0.45 },
+  { emoji: "🏺", size: 52, x: 73, y: 33, delay: 0.2 },
+  { emoji: "🪑", size: 56, x: 49, y: 49, delay: 0.3 },
+  { emoji: "🗄️", size: 58, x: 68, y: 52, delay: 0.1 },
+  { emoji: "🖥️", size: 62, x: 77, y: 50, delay: 0.5 },
+  { emoji: "🛍️", size: 58, x: 59, y: 55, delay: 0.4 },
+  { emoji: "🪆", size: 50, x: 59, y: 55, delay: 0.4 },
 ];
 
 function useGoogleAutocomplete(inputRef, onSelect, sessionKey) {
@@ -43,7 +44,7 @@ function useGoogleAutocomplete(inputRef, onSelect, sessionKey) {
 }
 
 function calcDistance(origin, destination) {
-  return new Promise<{distance, duration} | null>((resolve) => {
+  return new Promise((resolve) => {
     const interval = setInterval(() => {
       if (typeof window !== "undefined" && window.google?.maps) {
         clearInterval(interval);
@@ -69,6 +70,32 @@ function calcDistance(origin, destination) {
   });
 }
 
+const services = [
+  { icon: "🏠", label: "Traslochi residenziali" },
+  { icon: "🎓", label: "Traslochi studenti" },
+  { icon: "🛋️", label: "Consegna mobili" },
+  { icon: "🧺", label: "Consegna elettrodomestici" },
+  { icon: "🗑️", label: "Rimozione ingombranti" },
+  { icon: "❤️", label: "Donazioni" },
+  { icon: "🔧", label: "Attrezzature" },
+  { icon: "🪴", label: "Piante" },
+  { icon: "📦", label: "Scatole e pacchi" },
+  { icon: "🖥️", label: "Elettronica" },
+  { icon: "🏋️", label: "Attrezzatura palestra" },
+  { icon: "🎨", label: "Opere d'arte" },
+  { icon: "📚", label: "Libri e archivi" },
+  { icon: "🚲", label: "Biciclette" },
+  { icon: "🎹", label: "Strumenti musicali" },
+  { icon: "🛺", label: "Veicoli leggeri" },
+];
+
+const formFields = [
+  { key: "nome", placeholder: "Nome", type: "text" },
+  { key: "cognome", placeholder: "Cognome", type: "text" },
+  { key: "email", placeholder: "Email", type: "email" },
+  { key: "telefono", placeholder: "Telefono", type: "tel" },
+];
+
 export default function TuportuLanding() {
   const [pickup, setPickup] = useState("");
   const [dropoff, setDropoff] = useState("");
@@ -79,7 +106,6 @@ export default function TuportuLanding() {
   const [loadingDistance, setLoadingDistance] = useState(false);
   const [sendingForm, setSendingForm] = useState(false);
   const [sendError, setSendError] = useState(false);
-
   const [form, setForm] = useState({ nome: "", cognome: "", email: "", telefono: "" });
   const [formErrors, setFormErrors] = useState({});
   const [sessionKey, setSessionKey] = useState(0);
@@ -103,13 +129,13 @@ export default function TuportuLanding() {
   useGoogleAutocomplete(pickupRef, useCallback((addr) => setPickup(addr), []), sessionKey);
   useGoogleAutocomplete(dropoffRef, useCallback((addr) => setDropoff(addr), []), sessionKey);
 
-  const handleVediPrezzi = async () => {
+  const handleSubmit = async () => {
     if (!canSubmit) return;
-    setSubmitted(true);
     setLoadingDistance(true);
     const result = await calcDistance(pickup, dropoff);
     setDistanceInfo(result);
     setLoadingDistance(false);
+    setSubmitted(true);
   };
 
   const validateForm = () => {
@@ -121,36 +147,34 @@ export default function TuportuLanding() {
     return errors;
   };
 
-  const handleFormSubmit = async () => {
+  const handleSendForm = async () => {
     const errors = validateForm();
-    if (Object.keys(errors).length > 0) {
-      setFormErrors(errors);
-      return;
-    }
-
+    if (Object.keys(errors).length > 0) { setFormErrors(errors); return; }
     setSendingForm(true);
     setSendError(false);
-
     const payload = {
-      nome.nome,
-      cognome.cognome,
-      email.email,
-      telefono.telefono,
-      partenza,
-      destinazione,
-      distanza?.distance ?? "N/D",
-      tempo?.duration ?? "N/D",
+      nome: form.nome,
+      cognome: form.cognome,
+      email: form.email,
+      telefono: form.telefono,
+      partenza: pickup,
+      destinazione: dropoff,
+      distanza: distanceInfo?.distance ?? "N/D",
+      tempo: distanceInfo?.duration ?? "N/D",
     };
-
     try {
-      await fetch("https://script.google.com/macros/s/AKfycbzWCGoqDF98I8CjWpGbo-JHipYO4jMUd3tSJyzIP_Xts8USHUl4XZ3f6icx1p8btaye/exec", {
+      const res = await fetch("/api/submit", {
         method: "POST",
-        mode: "no-cors",
         headers: { "Content-Type": "application/json" },
-        body.stringify(payload),
+        body: JSON.stringify(payload),
       });
-      setFormSent(true);
-    } catch (err) {
+      const json = await res.json();
+      if (json.result === "success") {
+        setFormSent(true);
+      } else {
+        setSendError(true);
+      }
+    } catch {
       setSendError(true);
     } finally {
       setSendingForm(false);
@@ -160,186 +184,66 @@ export default function TuportuLanding() {
   const handleReset = () => {
     setSubmitted(false);
     setFormSent(false);
-    setDistanceInfo(null);
     setPickup("");
     setDropoff("");
+    setDistanceInfo(null);
     setForm({ nome: "", cognome: "", email: "", telefono: "" });
     setFormErrors({});
-    setSendError(false);
-    setSessionKey(k => k + 1); // forza remount degli input → reinizializza autocomplete
+    setSessionKey(k => k + 1);
   };
 
   return (
     <div style={styles.page}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes float0 { 0%,100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-12px) rotate(3deg); } }
+        @keyframes float1 { 0%,100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-16px) rotate(-4deg); } }
+        @keyframes float2 { 0%,100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-10px) rotate(5deg); } }
+        @keyframes float3 { 0%,100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-14px) rotate(-3deg); } }
+        @keyframes gradientBg { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+        @media (max-width: 640px) {
+          .tuportu-nav { padding: 0 20px !important; }
+          .tuportu-tagline { display: none !important; }
+          .tuportu-hero { padding: 40px 20px 60px !important; }
+          .tuportu-bar { flex-direction: column !important; border-radius: 20px !important; padding: 12px !important; gap: 4px !important; }
+          .tuportu-bar-divider { width: 100% !important; height: 1px !important; }
+          .tuportu-input-group { width: 100% !important; }
+          .tuportu-see-prices-btn { border-radius: 12px !important; width: 100% !important; text-align: center !important; }
+          .tuportu-bubbles { display: none !important; }
+          .tuportu-two-cards { grid-template-columns: 1fr !important; }
+          .tuportu-services-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .tuportu-section { padding: 48px 20px 0 !important; }
+          .tuportu-join { margin: 40px 20px !important; padding: 32px 24px !important; }
+          .tuportu-join-content { flex-wrap: wrap !important; gap: 20px !important; }
+          .tuportu-truck { display: none !important; }
+        }
+      `}</style>
+
       {/* Navbar */}
       <nav style={styles.nav} className="tuportu-nav">
         <div style={styles.navLeft}>
           <span style={styles.logo}>Tuportu</span>
           <span style={styles.tagline} className="tuportu-tagline">Traslochi on-demand</span>
         </div>
-        <div style={styles.navRight}>
-          <button style={styles.bookBtn}>Chiamaci</button>
-        </div>
+        <button style={styles.bookBtn} onClick={() => window.open("tel:+390000000000")}>Chiamaci</button>
       </nav>
 
-      {submitted ? (
-        <div style={styles.thankYouPage}>
-          {formSent ? (
-            /* ── Conferma finale ── */
-            <div style={styles.thankYouCard} className="tuportu-thank-card">
-              <div style={styles.checkIcon}>✓</div>
-              <h2 style={styles.thankYouTitle}>Grazie per la tua richiesta!</h2>
-              <p style={styles.thankYouDesc}>Ti contatteremo a breve per fornirti il preventivo.</p>
-              <button style={styles.backBtn} onClick={handleReset}>← Nuova richiesta</button>
-            </div>
-          ) : (
-            /* ── Card distanza + form ── */
-            <div style={styles.bigCard} className="tuportu-big-card">
-              {/* Riepilogo percorso */}
-              <div style={styles.routeHeader}>
-                <div style={styles.routeRow}>
-                  <span style={styles.routeIconUp}>↑</span>
-                  <span style={styles.routeText}>{pickup}</span>
-                </div>
-                <div style={styles.routeDotted} />
-                <div style={styles.routeRow}>
-                  <span style={styles.routeIconDown}>↓</span>
-                  <span style={styles.routeText}>{dropoff}</span>
-                </div>
-              </div>
-
-              {/* Distanza */}
-              <div style={styles.distanceBox}>
-                {loadingDistance ? (
-                  <span style={styles.distanceLoading}>Calcolo distanza…</span>
-                ) : distanceInfo ? (
-                  <>
-                    <div style={styles.distanceStat}>
-                      <span style={styles.distanceValue}>{distanceInfo.distance}</span>
-                      <span style={styles.distanceLabel}>distanza</span>
-                    </div>
-                    <div style={styles.distanceDivider} />
-                    <div style={styles.distanceStat}>
-                      <span style={styles.distanceValue}>{distanceInfo.duration}</span>
-                      <span style={styles.distanceLabel}>tempo stimato</span>
-                    </div>
-                  </>
-                ) : (
-                  <span style={styles.distanceLoading}>Impossibile calcolare la distanza</span>
-                )}
-              </div>
-
-              <div style={styles.formDivider} />
-
-              {/* Form */}
-              <p style={styles.formTitle}>Lasciaci i tuoi contatti</p>
-              <div style={styles.formGrid} className="tuportu-form-grid">
-                {[
-                  { key: "nome", label: "Nome", type: "text", placeholder: "Mario" },
-                  { key: "cognome", label: "Cognome", type: "text", placeholder: "Rossi" },
-                  { key: "email", label: "Email", type: "email", placeholder: "mario@email.com" },
-                  { key: "telefono", label: "Telefono", type: "tel", placeholder: "+39 333 000 0000" },
-                ].map(({ key, label, type, placeholder }) => (
-                  <div key={key} style={styles.fieldGroup}>
-                    <label style={styles.fieldLabel}>{label}</label>
-                    <input
-                      type={type}
-                      placeholder={placeholder}
-                      value={form[key]}
-                      onChange={e => {
-                        setForm(f => ({ ...f, [key]: e.target.value }));
-                        setFormErrors(err => ({ ...err, [key]: undefined }));
-                      }}
-                      style={{
-                        ...styles.fieldInput,
-                        borderColor[key] ? "#e04040" : "#e0e0e0",
-                      }}
-                    />
-                    {formErrors[key] && <span style={styles.fieldError}>{formErrors[key]}</span>}
-                  </div>
-                ))}
-              </div>
-
-              {sendError && (
-                <p style={styles.sendErrorMsg}>
-                  ⚠️ Errore durante l'invio. Riprova o contattaci direttamente.
-                </p>
-              )}
-
-              <div style={styles.formActions} className="tuportu-form-actions">
-                <button style={styles.backBtnSmall} onClick={handleReset}>← Indietro</button>
-                <button
-                  style={{
-                    ...styles.submitBtn,
-                    opacity ? 0.7 : 1,
-                    cursor ? "wait" : "pointer",
-                  }}
-                  disabled={sendingForm}
-                  onClick={handleFormSubmit}
-                >
-                  {sendingForm ? "Invio in corso…" : "Invia richiesta"}
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      ) : (
-        /* Hero */
+      {/* Hero */}
+      {!submitted ? (
         <section style={styles.hero} className="tuportu-hero">
-          <div style={styles.itemsContainer} className="tuportu-items-container">
-            {items.map((item, i) => (
-              <div
-                key={i}
-                style={{
-                  ...styles.itemBubble,
-                  width.size,
-                  height.size,
-                  left: `${item.x}%`,
-                  top: `${item.y}%`,
-                  opacity ? 1 : 0,
-                  transform ? "translateY(0)" : "translateY(20px)",
-                  transition: `opacity 0.6s ease ${item.delay}s, transform 0.6s ease ${item.delay}s`,
-                  animation: `float${i % 3} ${3 + (i % 2)}s ease-in-out ${item.delay}s infinite`,
-                  fontSize.size * 0.45,
-                }}
-              >
-                {item.emoji}
-              </div>
-            ))}
-          </div>
-
-          <div style={styles.heroContent} className="tuportu-hero-content">
-            <h1 style={{
-              ...styles.headline,
-              opacity ? 1 : 0,
-              transform ? "translateY(0)" : "translateY(30px)",
-              transition: "opacity 0.7s ease 0.2s, transform 0.7s ease 0.2s",
-            }}>
-              Trasporta <span style={styles.highlight}>di tutto</span>
+          <div style={styles.heroContent}>
+            <h1 style={styles.headline}>
+              <span style={styles.headlineBlack}>Trasporta</span><br />
+              <span style={styles.headlineYellow}>di tutto</span>
             </h1>
-            <h2 style={{
-              ...styles.subHeadline,
-              opacity ? 1 : 0,
-              transform ? "translateY(0)" : "translateY(30px)",
-              transition: "opacity 0.7s ease 0.35s, transform 0.7s ease 0.35s",
-            }}>
-              con un semplice click
-            </h2>
-            <p style={{
-              ...styles.desc,
-              opacity ? 1 : 0,
-              transition: "opacity 0.7s ease 0.5s",
-            }}>
-              In base alle tue esigenze, quando, dove e come vuoi
-            </p>
+            <p style={styles.subHeadline}>con un semplice click</p>
+            <p style={styles.desc}>In base alle tue esigenze, quando, dove e come vuoi</p>
 
-            <div className="tuportu-address-bar" style={{
-              ...styles.addressBar,
-              opacity ? 1 : 0,
-              transform ? "translateY(0)" : "translateY(20px)",
-              transition: "opacity 0.7s ease 0.6s, transform 0.7s ease 0.6s",
-            }}>
-              <div style={{...styles.inputGroup, position:"relative", flex:1}} className="tuportu-input-group">
+            {/* Search bar */}
+            <div style={styles.bar} className="tuportu-bar">
+              <div style={styles.inputGroup} className="tuportu-input-group">
                 <span style={styles.inputIcon}>↑</span>
                 <input
                   key={`pickup-${sessionKey}`}
@@ -349,9 +253,9 @@ export default function TuportuLanding() {
                   value={pickup}
                   onChange={e => setPickup(e.target.value)}
                 />
-                </div>
+              </div>
               <div style={styles.divider} className="tuportu-bar-divider" />
-              <div style={{...styles.inputGroup, position:"relative", flex:1}} className="tuportu-input-group">
+              <div style={styles.inputGroup} className="tuportu-input-group">
                 <span style={styles.inputIcon}>↓</span>
                 <input
                   key={`dropoff-${sessionKey}`}
@@ -361,259 +265,256 @@ export default function TuportuLanding() {
                   value={dropoff}
                   onChange={e => setDropoff(e.target.value)}
                 />
-                </div>
+              </div>
               <button
-                className="tuportu-see-prices"
-                style={{
-                  ...styles.seePricesBtn,
-                  background ? "#5b4fcf" : "#c8c8d0",
-                  cursor ? "pointer" : "not-allowed",
-                }}
-                disabled={!canSubmit}
-                onClick={handleVediPrezzi}
+                style={{ ...styles.seePricesBtn, background: canSubmit ? "#5b4fcf" : "#ccc", cursor: canSubmit ? "pointer" : "not-allowed" }}
+                className="tuportu-see-prices-btn"
+                onClick={handleSubmit}
+                disabled={!canSubmit || loadingDistance}
               >
-                Vedi prezzi
+                {loadingDistance ? "Calcolo..." : "Vedi prezzi"}
               </button>
             </div>
+          </div>
+
+          {/* Floating bubbles */}
+          {mounted && (
+            <div style={styles.bubblesArea} className="tuportu-bubbles">
+              {items.map((item, i) => (
+                <div
+                  key={i}
+                  style={{
+                    ...styles.itemBubble,
+                    width: item.size,
+                    height: item.size,
+                    left: `${item.x}%`,
+                    top: `${item.y}%`,
+                    opacity: mounted ? 1 : 0,
+                    transform: mounted ? "translateY(0)" : "translateY(20px)",
+                    transition: `opacity 0.6s ease ${item.delay}s, transform 0.6s ease ${item.delay}s`,
+                    animation: `float${i % 4} ${3 + (i % 3)}s ease-in-out ${item.delay}s infinite`,
+                    fontSize: item.size * 0.45,
+                  }}
+                >
+                  {item.emoji}
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+      ) : formSent ? (
+        /* Thank you */
+        <section style={styles.formSection}>
+          <div style={styles.thankYouCard}>
+            <div style={styles.checkIcon}>✓</div>
+            <h2 style={styles.thankYouTitle}>Richiesta inviata!</h2>
+            <p style={styles.thankYouDesc}>Ti contatteremo presto per confermare il tuo trasporto.</p>
+            <button style={styles.backBtn} onClick={handleReset}>Torna alla home</button>
+          </div>
+        </section>
+      ) : (
+        /* Booking form */
+        <section style={styles.formSection}>
+          <div style={styles.bigCard}>
+            <button style={styles.backLink} onClick={handleReset}>← Modifica percorso</button>
+
+            {/* Route summary */}
+            <div style={styles.routeBox}>
+              <div style={styles.routeRow}>
+                <span style={styles.routeIconUp}>↑</span>
+                <span style={styles.routeText}>{pickup}</span>
+              </div>
+              <div style={styles.routeDivider} />
+              <div style={styles.routeRow}>
+                <span style={styles.routeIconDown}>↓</span>
+                <span style={styles.routeText}>{dropoff}</span>
+              </div>
+            </div>
+
+            {distanceInfo && (
+              <div style={styles.distanceBadge}>
+                🚛 {distanceInfo.distance} · ⏱ {distanceInfo.duration}
+              </div>
+            )}
+
+            <h2 style={styles.formTitle}>I tuoi dati</h2>
+            <div style={styles.formGrid}>
+              {formFields.map(({ key, placeholder, type }) => (
+                <div key={key}>
+                  <input
+                    style={{ ...styles.fieldInput, borderColor: formErrors[key] ? "#e53e3e" : "#e0e0e0" }}
+                    type={type}
+                    placeholder={placeholder}
+                    value={form[key]}
+                    onChange={e => {
+                      setForm(f => ({ ...f, [key]: e.target.value }));
+                      setFormErrors(err => ({ ...err, [key]: undefined }));
+                    }}
+                  />
+                  {formErrors[key] && <p style={styles.fieldError}>{formErrors[key]}</p>}
+                </div>
+              ))}
+            </div>
+
+            {sendError && <p style={styles.sendError}>Errore nell'invio. Riprova.</p>}
+
+            <button
+              style={{ ...styles.submitBtn, opacity: sendingForm ? 0.7 : 1 }}
+              onClick={handleSendForm}
+              disabled={sendingForm}
+            >
+              {sendingForm ? "Invio in corso..." : "Richiedi preventivo"}
+            </button>
           </div>
         </section>
       )}
 
-        {/* ── SEZIONE 1 e trasporti ── */}
-        <section style={secStyles.section} className="tuportu-section">
-          <h2 style={secStyles.sectionTitle}>Consegne e trasporti su richiesta</h2>
-          <div style={secStyles.twoCards} className="tuportu-two-cards">
-            {/* Card tracciamento */}
-            <div style={secStyles.cardPurple}>
-              <p style={secStyles.cardLabel}>Tracciamenti in tempo reale</p>
-              <div style={secStyles.mapContainer} className="tuportu-map-container">
-                <img
-                  src="https://i.postimg.cc/7YTGHNSF/SVG.jpg"
-                  alt="mappa città"
-                  style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius, display: "block", position: "absolute", top, left }}
-                />
-              </div>
+      {/* Section: Delivery */}
+      <section style={secStyles.section} className="tuportu-section">
+        <h2 style={secStyles.sectionTitle}>Consegne e trasporti su richiesta</h2>
+        <div style={secStyles.twoCards} className="tuportu-two-cards">
+          {/* Purple card */}
+          <div style={secStyles.cardPurple}>
+            <p style={secStyles.cardLabel}>Tracciamenti in tempo reale</p>
+            <div style={secStyles.mapContainer}>
+              <img
+                src="https://i.postimg.cc/7YTGHNSF/SVG.jpg"
+                alt="Mappa percorso"
+                style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 16, display: "block", position: "absolute", top: 0, left: 0 }}
+              />
             </div>
-            {/* Card scheduling */}
-            <div style={secStyles.cardYellow}>
-              <p style={secStyles.cardLabelDark}>Quando vuoi in base alle esigenze</p>
-              <div style={secStyles.scheduleBox}>
-                <p style={secStyles.scheduleSubLabel}>Seleziona il giorno</p>
-                <div style={secStyles.daysRow}>
-                  {["12","13","14","15"].map((d,i) => (
-                    <div key={d} style={i===0 ? secStyles.dayActive : secStyles.dayInactive}>{d}</div>
-                  ))}
-                </div>
-                <p style={{...secStyles.scheduleSubLabel, marginTop:16}}>Seleziona l&apos;orario</p>
-                <div style={secStyles.slotsGrid}>
-                  {["Quanto prima","14.00 - 15.00","15.00 - 16.00","16.00 - 17.00"].map((s,i) => (
-                    <div key={s} style={i===0 ? secStyles.slotActive : secStyles.slotInactive}>{s}</div>
-                  ))}
-                </div>
+          </div>
+          {/* Yellow card */}
+          <div style={secStyles.cardYellow}>
+            <p style={secStyles.cardLabelDark}>Scegli data e ora</p>
+            <div style={secStyles.scheduleBox}>
+              <p style={secStyles.scheduleSubLabel}>Giorno</p>
+              <div style={secStyles.daysRow}>
+                {[12, 13, 14, 15].map(d => (
+                  <div key={d} style={d === 13 ? secStyles.dayActive : secStyles.dayInactive}>{d}</div>
+                ))}
+              </div>
+              <p style={{ ...secStyles.scheduleSubLabel, marginTop: 16 }}>Orario</p>
+              <div style={secStyles.slotsGrid}>
+                {["08:00", "10:00", "12:00", "14:00", "16:00", "18:00"].map((t, i) => (
+                  <div key={t} style={i === 1 ? secStyles.slotActive : secStyles.slotInactive}>{t}</div>
+                ))}
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ── SEZIONE 2 ── */}
-        <section style={secStyles.section} className="tuportu-section">
-          <h2 style={secStyles.sectionTitle}>Un camion per ogni occasione</h2>
-          <div style={secStyles.servicesGrid} className="tuportu-services-grid">
-            {[
-              {icon:"🏠", label:"Traslochi residenziali"},
-              {icon:"🎓", label:"Traslochi studenti"},
-              {icon:"🏢", label:"Consegna scorte di magazzino"},
-              {icon:"🏬", label:"Traslochi commerciali"},
-              {icon:"🛋️", label:"Consegna mobili"},
-              {icon:"🫙", label:"Consegna elettrodomestici"},
-              {icon:"♻️", label:"Consegna articoli usati"},
-              {icon:"📦", label:"Consegna articoli grandi"},
-              {icon:"🗑️", label:"Rimozione spazzatura"},
-              {icon:"💝", label:"Consegna donazioni"},
-              {icon:"💼", label:"Servizi di lavoro"},
-              {icon:"🚛", label:"Camion per traslochi"},
-              {icon:"📺", label:"Consegna TV"},
-              {icon:"🔧", label:"Consegna attrezzi"},
-              {icon:"🪴", label:"Consegna piante"},
-              {icon:"🏪", label:"Consegna in negozio"},
-            ].map(({icon, label}) => (
-              <div key={label} style={secStyles.serviceItem}>
-                <span style={secStyles.serviceIcon}>{icon}</span>
-                <span style={secStyles.serviceLabel}>{label}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ── SEZIONE 3 uno di noi ── */}
-        <section style={secStyles.joinSection} className="tuportu-join">
-          <div style={secStyles.joinContent} className="tuportu-join-content">
-            <div>
-              <h2 style={secStyles.joinTitle}>Diventa uno di noi</h2>
-              <p style={secStyles.joinDesc}>Guadagna soldi con il tuo furgone su richiesta</p>
+      {/* Section: Services */}
+      <section style={secStyles.section} className="tuportu-section">
+        <h2 style={secStyles.sectionTitle}>Un camion per ogni occasione</h2>
+        <div style={secStyles.servicesGrid} className="tuportu-services-grid">
+          {services.map((s, i) => (
+            <div key={i} style={secStyles.serviceItem}>
+              <span style={secStyles.serviceIcon}>{s.icon}</span>
+              <span style={secStyles.serviceLabel}>{s.label}</span>
             </div>
-            <button style={secStyles.joinBtn}>Contattaci</button>
-            <div style={secStyles.truckEmoji} className="tuportu-truck">🚚</div>
+          ))}
+        </div>
+      </section>
+
+      {/* Section: Join */}
+      <div style={secStyles.joinSection} className="tuportu-join">
+        <div style={secStyles.joinContent} className="tuportu-join-content">
+          <div>
+            <h2 style={secStyles.joinTitle}>Diventa uno di noi</h2>
+            <p style={secStyles.joinDesc}>Hai un furgone? Lavora con noi e guadagna quando vuoi.</p>
           </div>
-        </section>
+          <button style={secStyles.joinBtn}>Contattaci</button>
+          <span style={secStyles.truckEmoji} className="tuportu-truck">🚛</span>
+        </div>
+      </div>
 
-        {/* ── FOOTER ── */}
-        <footer style={footerStyles.footer}>
-          <span style={footerStyles.logo}>Tuportu</span>
-          <span style={footerStyles.copy}>© {new Date().getFullYear()} Tuportu. Tutti i diritti riservati.</span>
-        </footer>
-
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;900&display=swap');
-        * { box-sizing-box; margin; padding; }
-        body { font-family: 'Outfit', sans-serif; }
-        @keyframes float0 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-        @keyframes float1 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-15px)} }
-        @keyframes float2 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
-        @keyframes fadeInUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
-        a { text-decoration; }
-        input:focus { outline; }
-        button { cursor; font-family: 'Outfit', sans-serif; }
-
-        /* Google Places dropdown */
-        .pac-container { font-family:'Outfit',sans-serif !important; border-radius:12px !important; border:1.5px solid #e0e0e0 !important; box-shadow:0 8px 32px rgba(0,0,0,0.10) !important; margin-top:6px !important; overflow:hidden !important; }
-        .pac-item { padding:10px 16px !important; font-size:14px !important; color:#333 !important; cursor:pointer !important; border-top:1px solid #f0f0f0 !important; }
-        .pac-item:hover { background:#f7f5ff !important; }
-        .pac-item-query { font-size:14px !important; font-weight:600 !important; color:#1a1a2e !important; }
-        .pac-icon { display:none !important; }
-        .pac-matched { color:#5b4fcf !important; font-weight:700 !important; }
-        .pac-logo::after { display:none !important; }
-
-        /* ── MOBILE ── */
-        @media (max-width) {
-          .tuportu-nav { padding 20px !important; }
-          .tuportu-tagline { display; }
-          .tuportu-hero { padding-top !important; padding-left !important; padding-right !important; align-items-start !important; }
-          .tuportu-hero-content { max-width% !important; }
-          .tuportu-address-bar { flex-direction !important; border-radius !important; max-width% !important; }
-          .tuportu-input-group { width% !important; padding 16px !important; }
-          .tuportu-bar-divider { width% !important; height !important; }
-          .tuportu-see-prices { width% !important; border-radius 0 14px 14px !important; padding !important; text-align; }
-          .tuportu-big-card { padding 20px !important; border-radius !important; }
-          .tuportu-form-grid { grid-template-columns !important; }
-          .tuportu-form-actions { flex-direction !important; gap !important; }
-          .tuportu-form-actions button { width% !important; justify-content; }
-          .tuportu-thank-card { padding 24px !important; }
-          .tuportu-items-container { opacity.3; }
-          .tuportu-map-container { position; }
-          .tuportu-map-container { min-height !important; }
-          .tuportu-two-cards { grid-template-columns !important; }
-          .tuportu-services-grid { grid-template-columns: repeat(2, 1fr) !important; }
-          .tuportu-section { padding 20px 0 !important; }
-          .tuportu-join { margin 20px !important; padding 24px !important; }
-          .tuportu-join-content { flex-wrap !important; gap !important; }
-          .tuportu-truck { display !important; }
-        }
-      `}</style>
+      {/* Footer */}
+      <footer style={footerStyles.footer}>
+        <span style={footerStyles.logo}>Tuportu</span>
+        <span style={footerStyles.copy}>© {new Date().getFullYear()} Tuportu</span>
+      </footer>
     </div>
   );
 }
 
-const footerStyles = {
-  footer: { display: "flex", alignItems: "center", justifyContent: "space-between", padding: "24px 80px", borderTop: "1px solid #f0f0f0", background: "#fff" },
-  logo: { fontSize, fontWeight, color: "#1a1a2e", letterSpacing: "-1px" },
-  copy: { fontSize, color: "#aaa", fontWeight },
+const styles = {
+  page: { minHeight: "100vh", background: "#f9f9fb", fontFamily: "'Outfit', sans-serif" },
+  nav: { display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 80px", height: 65, background: "#fff", borderBottom: "1px solid #f0f0f0", position: "sticky", top: 0, zIndex: 100 },
+  navLeft: { display: "flex", alignItems: "center", gap: 12 },
+  logo: { fontSize: 22, fontWeight: 900, color: "#1a1a2e", letterSpacing: "-1px" },
+  tagline: { fontSize: 13, color: "#888", fontWeight: 400 },
+  bookBtn: { background: "#5b4fcf", color: "#fff", border: "none", borderRadius: 12, padding: "10px 22px", fontSize: 14, fontWeight: 600, cursor: "pointer" },
+  hero: { minHeight: "auto", paddingBottom: 80, padding: "60px 80px 80px", position: "relative", overflow: "hidden", background: "#fff" },
+  heroContent: { maxWidth: 560, position: "relative", zIndex: 2 },
+  headline: { fontSize: "clamp(48px, 6vw, 88px)", fontWeight: 900, color: "#111", lineHeight: 1.05, letterSpacing: "-2px" },
+  headlineBlack: { color: "#111" },
+  headlineYellow: { background: "#ffe033", borderRadius: 12, padding: "0 12px", color: "#111", display: "inline-block" },
+  subHeadline: { fontSize: "clamp(40px, 5.5vw, 82px)", fontWeight: 900, color: "#c8c8c8", lineHeight: 1.05, letterSpacing: "-2px", marginTop: 0 },
+  desc: { fontSize: 17, color: "#555", marginTop: 16, lineHeight: 1.6, maxWidth: 420 },
+  bar: { display: "flex", alignItems: "center", background: "#fff", borderRadius: 18, boxShadow: "0 4px 32px rgba(0,0,0,0.10)", padding: "6px 6px 6px 20px", marginTop: 36, maxWidth: 620, gap: 0, border: "1.5px solid #ececec" },
+  inputGroup: { display: "flex", alignItems: "center", gap: 10, flex: 1, minWidth: 0 },
+  inputIcon: { fontSize: 16, color: "#5b4fcf", fontWeight: 700, flexShrink: 0 },
+  input: { border: "none", outline: "none", fontSize: 15, color: "#222", background: "transparent", width: "100%", fontFamily: "'Outfit', sans-serif" },
+  divider: { width: 1, height: 32, background: "#e8e8e8", margin: "0 8px", flexShrink: 0 },
+  seePricesBtn: { color: "#fff", border: "none", padding: "14px 28px", fontSize: 15, fontWeight: 600, fontFamily: "'Outfit', sans-serif", borderRadius: "0 12px 12px 0", flexShrink: 0, transition: "background 0.3s" },
+  bubblesArea: { position: "absolute", top: 0, right: 0, width: "55%", height: "100%", pointerEvents: "none", zIndex: 1 },
+  itemBubble: { position: "absolute", borderRadius: "50%", background: "#f5f5f7", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 20px rgba(0,0,0,0.07)" },
+  formSection: { display: "flex", alignItems: "center", justifyContent: "center", padding: "60px 20px", minHeight: "calc(100vh - 65px)" },
+  thankYouCard: { background: "#fff", borderRadius: 24, padding: "56px 48px", maxWidth: 480, width: "100%", textAlign: "center", boxShadow: "0 8px 48px rgba(0,0,0,0.08)", animation: "fadeInUp 0.5s ease forwards" },
+  checkIcon: { width: 64, height: 64, background: "#5b4fcf", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28, color: "#fff", margin: "0 auto 24px", fontWeight: 700 },
+  thankYouTitle: { fontSize: 28, fontWeight: 800, color: "#111", letterSpacing: "-0.5px", marginBottom: 12 },
+  thankYouDesc: { fontSize: 16, color: "#777", lineHeight: 1.6, marginBottom: 32 },
+  backBtn: { background: "transparent", border: "2px solid #5b4fcf", color: "#5b4fcf", borderRadius: 12, padding: "12px 28px", fontSize: 15, fontWeight: 600, cursor: "pointer" },
+  bigCard: { background: "#fff", borderRadius: 24, padding: "40px 44px", maxWidth: 560, width: "100%", boxShadow: "0 8px 48px rgba(0,0,0,0.08)", animation: "fadeInUp 0.5s ease forwards" },
+  backLink: { background: "none", border: "none", color: "#5b4fcf", fontSize: 14, fontWeight: 600, cursor: "pointer", marginBottom: 24, display: "block", padding: 0 },
+  routeBox: { background: "#f7f5ff", borderRadius: 16, padding: "16px 20px", marginBottom: 16 },
+  routeRow: { display: "flex", alignItems: "flex-start", gap: 12 },
+  routeDivider: { height: 1, background: "#e8e4ff", margin: "10px 0" },
+  routeIconUp: { fontSize: 16, color: "#5b4fcf", fontWeight: 700, flexShrink: 0, marginTop: 2 },
+  routeIconDown: { fontSize: 16, color: "#5b4fcf", fontWeight: 700, flexShrink: 0, marginTop: 2 },
+  routeText: { fontSize: 14, color: "#333", lineHeight: 1.4 },
+  distanceBadge: { background: "#f0f0f0", borderRadius: 10, padding: "10px 16px", fontSize: 14, color: "#555", marginBottom: 24, display: "inline-block" },
+  formTitle: { fontSize: 20, fontWeight: 700, color: "#111", marginBottom: 16 },
+  formGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 20 },
+  fieldInput: { width: "100%", border: "1.5px solid #e0e0e0", borderRadius: 12, padding: "13px 16px", fontSize: 15, outline: "none", fontFamily: "'Outfit', sans-serif", color: "#222" },
+  fieldError: { fontSize: 12, color: "#e53e3e", marginTop: 4 },
+  sendError: { fontSize: 14, color: "#e53e3e", marginBottom: 12 },
+  submitBtn: { width: "100%", background: "#5b4fcf", color: "#fff", border: "none", borderRadius: 14, padding: "16px", fontSize: 16, fontWeight: 700, cursor: "pointer", fontFamily: "'Outfit', sans-serif" },
 };
 
 const secStyles = {
-  section: { padding: "48px 80px 0", background: "#fff" },
-  sectionTitle: { fontSize: "clamp(28px, 4vw, 42px)", fontWeight, color: "#111", letterSpacing: "-1px", marginBottom },
-
-  // Two cards
-  twoCards: { display: "grid", gridTemplateColumns: "1fr 1fr", gap, alignItems: "stretch" },
-  cardPurple: { background: "linear-gradient(135deg, #5b4fcf, #7c6fe0)", borderRadius, padding, overflow: "hidden", display: "flex", flexDirection: "column" },
-  cardLabel: { fontSize, fontWeight, color: "#fff", marginBottom },
-  cardLabelDark: { fontSize, fontWeight, color: "#1a1a2e", marginBottom },
-  cardYellow: { background: "linear-gradient(135deg, #ffc107, #ffdd57)", borderRadius, padding, display: "flex", flexDirection: "column" },
-  mapPlaceholder: { background: "rgba(255,255,255,0.15)", borderRadius, padding, display: "flex", flexDirection: "column", alignItems: "center", gap },
-  mapContainer: { borderRadius, overflow: "hidden", flex, marginTop, minHeight, position: "relative" },
-  mapPin: { width, height, background: "#fff", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize, color: "#5b4fcf", fontWeight, boxShadow: "0 4px 16px rgba(0,0,0,0.15)" },
-  mapRoute: { width, height, background: "rgba(255,255,255,0.5)", borderRadius },
-  mapDot: { width, height, background: "#ffe033", borderRadius: "50%", border: "3px solid #fff" },
-  mapText: { fontSize, color: "rgba(255,255,255,0.85)", textAlign: "center", marginTop },
-
-  // Schedule
-  scheduleBox: { background: "#fff", borderRadius, padding: "20px 20px", flex, marginTop },
-  scheduleSubLabel: { fontSize, color: "#888", fontWeight, marginBottom, textTransform: "uppercase", letterSpacing: "0.4px" },
-  daysRow: { display: "flex", gap },
-  dayActive: { width, height, background: "#5b4fcf", color: "#fff", borderRadius, display: "flex", alignItems: "center", justifyContent: "center", fontWeight, fontSize },
-  dayInactive: { width, height, background: "#f4f4f6", color: "#999", borderRadius, display: "flex", alignItems: "center", justifyContent: "center", fontWeight, fontSize },
-  slotsGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap },
-  slotActive: { background: "#5b4fcf", color: "#fff", borderRadius, padding: "10px 14px", fontSize, fontWeight, textAlign: "center" },
-  slotInactive: { background: "#f4f4f6", color: "#555", borderRadius, padding: "10px 14px", fontSize, fontWeight, textAlign: "center" },
-
-  // Services grid
-  servicesGrid: { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap },
-  serviceItem: { display: "flex", alignItems: "center", gap, padding: "16px 18px", border: "1.5px solid #f0f0f0", borderRadius, background: "#fff", transition: "box-shadow 0.2s" },
-  serviceIcon: { fontSize, flexShrink },
-  serviceLabel: { fontSize, fontWeight, color: "#333", lineHeight.3 },
-
-  // Join section
-  joinSection: { margin: "80px 80px 80px", background: "#f7f5ff", borderRadius, padding: "48px 56px" },
-  joinContent: { display: "flex", alignItems: "center", gap },
-  joinTitle: { fontSize: "clamp(24px, 3vw, 36px)", fontWeight, color: "#111", letterSpacing: "-0.5px", marginBottom },
-  joinDesc: { fontSize, color: "#666" },
-  joinBtn: { background: "#ffe033", color: "#1a1a2e", border: "none", borderRadius, padding: "14px 32px", fontSize, fontWeight, flexShrink, whiteSpace: "nowrap" },
-  truckEmoji: { fontSize, marginLeft: "auto", flexShrink },
+  section: { padding: "48px 80px 0" },
+  sectionTitle: { fontSize: "clamp(28px, 4vw, 42px)", fontWeight: 800, color: "#111", letterSpacing: "-1px", marginBottom: 24 },
+  twoCards: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, alignItems: "stretch" },
+  cardPurple: { background: "linear-gradient(135deg, #5b4fcf, #7c6fe0)", borderRadius: 24, padding: 28, overflow: "hidden", display: "flex", flexDirection: "column" },
+  cardYellow: { background: "linear-gradient(135deg, #ffc107, #ffdd57)", borderRadius: 24, padding: 28, display: "flex", flexDirection: "column" },
+  cardLabel: { fontSize: 18, fontWeight: 700, color: "#fff", marginBottom: 12 },
+  cardLabelDark: { fontSize: 18, fontWeight: 700, color: "#1a1a2e", marginBottom: 12 },
+  mapContainer: { borderRadius: 16, overflow: "hidden", flex: 1, marginTop: 12, minHeight: 0, position: "relative" },
+  scheduleBox: { background: "#fff", borderRadius: 16, padding: "20px 20px", flex: 1, marginTop: 12 },
+  scheduleSubLabel: { fontSize: 11, color: "#888", fontWeight: 600, marginBottom: 10, textTransform: "uppercase", letterSpacing: "0.4px" },
+  daysRow: { display: "flex", gap: 8 },
+  dayActive: { width: 40, height: 40, background: "#5b4fcf", color: "#fff", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, fontSize: 14 },
+  dayInactive: { width: 40, height: 40, background: "#f4f4f6", color: "#999", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 600, fontSize: 14 },
+  slotsGrid: { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 },
+  slotActive: { background: "#5b4fcf", color: "#fff", borderRadius: 10, padding: "10px 14px", fontSize: 13, fontWeight: 700, textAlign: "center" },
+  slotInactive: { background: "#f4f4f6", color: "#555", borderRadius: 10, padding: "10px 14px", fontSize: 13, fontWeight: 500, textAlign: "center" },
+  servicesGrid: { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 },
+  serviceItem: { background: "#fff", borderRadius: 16, padding: "16px 14px", display: "flex", alignItems: "center", gap: 10, border: "1.5px solid #f0f0f0" },
+  serviceIcon: { fontSize: 22, flexShrink: 0 },
+  serviceLabel: { fontSize: 13, fontWeight: 600, color: "#333", lineHeight: 1.3 },
+  joinSection: { background: "#f7f5ff", borderRadius: 24, margin: "40px 80px", padding: "36px 48px" },
+  joinContent: { display: "flex", alignItems: "center", gap: 40 },
+  joinTitle: { fontSize: "clamp(24px, 3vw, 36px)", fontWeight: 800, color: "#111", letterSpacing: "-0.5px", marginBottom: 8 },
+  joinDesc: { fontSize: 16, color: "#666" },
+  joinBtn: { background: "#ffe033", color: "#1a1a2e", border: "none", borderRadius: 14, padding: "14px 32px", fontSize: 15, fontWeight: 700, flexShrink: 0, whiteSpace: "nowrap", cursor: "pointer" },
+  truckEmoji: { fontSize: 64, marginLeft: "auto", flexShrink: 0 },
 };
 
-const styles = {
-  page: { fontFamily: "'Outfit', sans-serif", minHeight: "100vh", background: "#ffffff", overflow: "hidden" },
-  nav: { display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 48px", borderBottom: "1px solid #f0f0f0", position: "relative", zIndex, background: "#fff" },
-  navLeft: { display: "flex", alignItems: "center", gap },
-  logo: { fontSize, fontWeight, color: "#1a1a2e", letterSpacing: "-1px" },
-  tagline: { fontSize, color: "#888", fontWeight },
-  navRight: { display: "flex", alignItems: "center", gap },
-  bookBtn: { background: "#5b4fcf", color: "#fff", border: "none", borderRadius, padding: "10px 22px", fontSize, fontWeight },
-  thankYouPage: { minHeight: "calc(100vh - 65px)", display: "flex", alignItems: "center", justifyContent: "center", background: "#fafafa", padding: "32px 16px" },
-  thankYouCard: { background: "#fff", borderRadius, padding: "56px 48px", maxWidth, width: "100%", textAlign: "center", boxShadow: "0 8px 48px rgba(0,0,0,0.08)", animation: "fadeInUp 0.5s ease forwards" },
-  checkIcon: { width, height, background: "#5b4fcf", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize, color: "#fff", margin: "0 auto 24px", fontWeight },
-  thankYouTitle: { fontSize, fontWeight, color: "#111", letterSpacing: "-0.5px", marginBottom },
-  thankYouDesc: { fontSize, color: "#777", lineHeight.6, marginBottom },
-  backBtn: { background: "transparent", border: "2px solid #5b4fcf", color: "#5b4fcf", borderRadius, padding: "12px 28px", fontSize, fontWeight },
-  bigCard: { background: "#fff", borderRadius, padding: "40px 44px", maxWidth, width: "100%", boxShadow: "0 8px 48px rgba(0,0,0,0.08)", animation: "fadeInUp 0.5s ease forwards" },
-  routeHeader: { background: "#f7f5ff", borderRadius, padding: "18px 20px", marginBottom },
-  routeRow: { display: "flex", alignItems: "flex-start", gap },
-  routeIconUp: { fontSize, color: "#5b4fcf", fontWeight, flexShrink, marginTop },
-  routeIconDown: { fontSize, color: "#5b4fcf", fontWeight, flexShrink, marginTop },
-  routeText: { fontSize, color: "#333", fontWeight, lineHeight.4 },
-  routeDotted: { borderLeft: "2px dashed #c5bef5", height, marginLeft, marginTop, marginBottom },
-  distanceBox: { display: "flex", alignItems: "center", justifyContent: "center", background: "#1a1a2e", borderRadius, padding: "20px 28px", marginBottom },
-  distanceStat: { display: "flex", flexDirection: "column", alignItems: "center", flex },
-  distanceValue: { fontSize, fontWeight, color: "#fff", letterSpacing: "-0.5px" },
-  distanceLabel: { fontSize, color: "#8888aa", fontWeight, marginTop, textTransform: "uppercase", letterSpacing: "0.5px" },
-  distanceDivider: { width, height, background: "#333355", margin: "0 20px" },
-  distanceLoading: { fontSize, color: "#8888aa" },
-  formDivider: { height, background: "#f0f0f0", marginBottom },
-  formTitle: { fontSize, fontWeight, color: "#111", marginBottom },
-  formGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px 20px", marginBottom },
-  fieldGroup: { display: "flex", flexDirection: "column", gap },
-  fieldLabel: { fontSize, fontWeight, color: "#555", textTransform: "uppercase", letterSpacing: "0.4px" },
-  fieldInput: { border: "1.5px solid #e0e0e0", borderRadius, padding: "11px 14px", fontSize, color: "#333", fontFamily: "'Outfit', sans-serif", transition: "border-color 0.2s" },
-  fieldError: { fontSize, color: "#e04040", fontWeight },
-  sendErrorMsg: { fontSize, color: "#e04040", marginBottom, textAlign: "center" },
-  formActions: { display: "flex", justifyContent: "space-between", alignItems: "center" },
-  backBtnSmall: { background: "transparent", border: "2px solid #e0e0e0", color: "#777", borderRadius, padding: "11px 20px", fontSize, fontWeight },
-  submitBtn: { background: "#5b4fcf", color: "#fff", border: "none", borderRadius, padding: "12px 28px", fontSize, fontWeight, transition: "opacity 0.2s" },
-  hero: { position: "relative", minHeight: "auto", paddingBottom, display: "flex", alignItems: "flex-start", paddingTop, paddingLeft, overflow: "hidden" },
-  itemsContainer: { position: "absolute", inset, pointerEvents: "none" },
-  itemBubble: { position: "absolute", background: "#f4f4f6", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" },
-  heroContent: { position: "relative", zIndex, maxWidth },
-  headline: { fontSize: "clamp(48px, 6vw, 88px)", fontWeight, color: "#111", lineHeight.05, letterSpacing: "-2px" },
-  highlight: { background: "#ffe033", borderRadius, padding: "0 12px", display: "inline-block" },
-  subHeadline: { fontSize: "clamp(40px, 5.5vw, 82px)", fontWeight, color: "#c8c8c8", lineHeight.05, letterSpacing: "-2px", marginTop },
-  desc: { fontSize, color: "#555", marginTop, lineHeight.6, maxWidth },
-  addressBar: { marginTop, display: "flex", alignItems: "center", border: "2px solid #e0e0e0", borderRadius, background: "#fff", overflow: "hidden", maxWidth, boxShadow: "0 4px 24px rgba(0,0,0,0.07)" },
-  inputGroup: { display: "flex", alignItems: "center", flex, padding: "14px 16px", gap },
-  inputIcon: { fontSize, color: "#888", flexShrink },
-  input: { border: "none", fontSize, color: "#333", fontFamily: "'Outfit', sans-serif", background: "transparent", width: "100%", fontWeight },
-  divider: { width, height, background: "#e0e0e0", flexShrink },
-  seePricesBtn: { color: "#fff", border: "none", padding: "14px 28px", fontSize, fontWeight, fontFamily: "'Outfit', sans-serif", borderRadius: "0 12px 12px 0", flexShrink, transition: "background 0.3s" },
-  dropdown: { position: "absolute", top: "100%", left, right, background: "#fff", borderRadius, boxShadow: "0 8px 32px rgba(0,0,0,0.12)", border: "1.5px solid #e0e0e0", zIndex, marginTop, overflow: "hidden" },
-  dropdownItem: { padding: "11px 16px", fontSize, color: "#333", cursor: "pointer", borderBottom: "1px solid #f5f5f5", fontWeight, transition: "background 0.15s" },
+const footerStyles = {
+  footer: { display: "flex", alignItems: "center", justifyContent: "space-between", padding: "24px 80px", borderTop: "1px solid #f0f0f0", marginTop: 48 },
+  logo: { fontSize: 22, fontWeight: 900, color: "#1a1a2e", letterSpacing: "-1px" },
+  copy: { fontSize: 13, color: "#aaa", fontWeight: 400 },
 };
