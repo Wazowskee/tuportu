@@ -80,8 +80,8 @@ export default function TuportuLanding() {
   const [sendingForm, setSendingForm] = useState(false);
   const [sendError, setSendError] = useState(false);
 
-  const [form, setForm] = useState({ nome: "", cognome: "", email: "", telefono: "" });
-  const [formErrors, setFormErrors] = useState({});
+  const [form, setForm] = useState<Record<string, string>>({ nome: "", cognome: "", email: "", telefono: "" });
+  const [formErrors, setFormErrors] = useState<Record<string, string | undefined>>({});
   const [sessionKey, setSessionKey] = useState(0);
 
   const pickupRef = useRef(null);
