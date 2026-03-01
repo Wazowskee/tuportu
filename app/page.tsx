@@ -75,7 +75,7 @@ export default function TuportuLanding() {
   const [mounted, setMounted] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [formSent, setFormSent] = useState(false);
-  const [distanceInfo, setDistanceInfo] = useState(null);
+  const [distanceInfo, setDistanceInfo] = useState<{distance: string, duration: string} | null>(null);
   const [loadingDistance, setLoadingDistance] = useState(false);
   const [sendingForm, setSendingForm] = useState(false);
   const [sendError, setSendError] = useState(false);
