@@ -26,9 +26,9 @@ function useGoogleAutocomplete(inputRef, onSelect, sessionKey) {
   useEffect(() => {
     if (!inputRef.current) return;
     const interval = setInterval(() => {
-      if (typeof window !== "undefined" && (window as any).google?.maps?.places) {
+      if (typeof window !== "undefined" && window.google?.maps?.places) {
         clearInterval(interval);
-        const autocomplete = new (window as any).google.maps.places.Autocomplete(inputRef.current, {
+        const autocomplete = new window.google.maps.places.Autocomplete(inputRef.current, {
           types: ["address"],
           componentRestrictions: { country: "it" },
         });
@@ -45,15 +45,15 @@ function useGoogleAutocomplete(inputRef, onSelect, sessionKey) {
 function calcDistance(origin, destination) {
   return new Promise<{distance, duration} | null>((resolve) => {
     const interval = setInterval(() => {
-      if (typeof window !== "undefined" && (window as any).google?.maps) {
+      if (typeof window !== "undefined" && window.google?.maps) {
         clearInterval(interval);
-        const service = new (window as any).google.maps.DistanceMatrixService();
+        const service = new window.google.maps.DistanceMatrixService();
         service.getDistanceMatrix(
           {
             origins: [origin],
             destinations: [destination],
-            travelMode: (window as any).google.maps.TravelMode.DRIVING,
-            unitSystem: (window as any).google.maps.UnitSystem.METRIC,
+            travelMode: window.google.maps.TravelMode.DRIVING,
+            unitSystem: window.google.maps.UnitSystem.METRIC,
           },
           (response: any, status) => {
             if (status === "OK") {
